@@ -13,6 +13,8 @@ import RegistroPage from "./pages/RegistroPage";
 
 // Páginas de Cliente
 import VitrinaPage from "./pages/VitrinaPage";
+import CheckoutPage from "./pages/CheckoutPage";
+import MisPedidosPage from "./pages/MisPedidosPage"; // <-- IMPORTADO
 
 // Páginas de Staff
 import DashboardPage from "./pages/DashboardPage";
@@ -20,7 +22,8 @@ import ProductosPage from "./pages/ProductosPage";
 import CajerosPage from "./pages/CajerosPage";
 import NuevoProductoPage from "./pages/NuevoProductoPage";
 import POSPage from "./pages/POSPage";
-import HistorialVentasPage from "./pages/HistorialVentasPage"; // <-- NUEVO
+import HistorialVentasPage from "./pages/HistorialVentasPage";
+import PedidosPage from "./pages/PedidosPage";
 
 // Páginas Generales
 import SinAccesoPage from "./pages/SinAcceso";
@@ -62,7 +65,18 @@ function App() {
         <Route path="/sin-acceso" element={<SinAccesoPage />} />
 
         {/* ======================================================
-            3. RUTAS PROTEGIDAS (Staff: ADMIN y CAJERO)
+            3. RUTAS PROTEGIDAS: CLIENTE AUTENTICADO
+        ====================================================== */}
+        <Route element={<RutaProtegida rolesPermitidos={["CLIENTE"]} />}>
+          <Route element={<LayoutCliente />}>
+            <Route path="/checkout" element={<CheckoutPage />} />
+            <Route path="/mis-pedidos" element={<MisPedidosPage />} />{" "}
+            {/* <-- RUTA AGREGADA */}
+          </Route>
+        </Route>
+
+        {/* ======================================================
+            4. RUTAS PROTEGIDAS: STAFF (ADMINISTRADOR Y CAJERO)
         ====================================================== */}
         <Route
           element={
@@ -75,6 +89,7 @@ function App() {
             <Route path="/productos/nuevo" element={<NuevoProductoPage />} />
             <Route path="/pos" element={<POSPage />} />
             <Route path="/historial-ventas" element={<HistorialVentasPage />} />
+            <Route path="/pedidos" element={<PedidosPage />} />
 
             {/* Rutas SOLO para Administrador (anidadas) */}
             <Route
@@ -86,7 +101,7 @@ function App() {
         </Route>
 
         {/* ======================================================
-            4. RUTA COMODÍN
+            5. RUTA COMODÍN (Redirige a la raíz)
         ====================================================== */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

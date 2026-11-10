@@ -10,9 +10,11 @@ import {
   Printer,
   CheckCircle,
   AlertTriangle,
+  AlertCircle,
 } from "lucide-react";
 import { productoService } from "../services/productos";
 import { ventaService } from "../services/ventas";
+import { cajaService } from "../services/caja"; // ✅ NUEVO: Importar servicio de cajas
 import { useCarritoStore } from "../store/carritoStore";
 import { Boton } from "../componentes/ui/Boton";
 import type { ProductoConDetalles } from "../types/Producto";
@@ -55,6 +57,10 @@ export default function POSPage() {
   const [ventaExitosa, setVentaExitosa] = useState<any>(null);
   const [errorVenta, setErrorVenta] = useState<string | null>(null);
 
+  // ✅ NUEVO: Estados para manejar la caja activa dinámicamente
+  const [cajaActiva, setCajaActiva] = useState<any>(null);
+  const [cargandoCaja, setCargandoCaja] = useState(true);
+
   const { register, handleSubmit, watch } = useForm<VentaFormData>({
     resolver: zodResolver(ventaSchema),
     defaultValues: { metodoPago: "EFECTIVO", observaciones: "" },
@@ -63,6 +69,24 @@ export default function POSPage() {
   const metodoPago = watch("metodoPago");
   const montoRecibido = watch("montoRecibido");
   const total = calcularTotal();
+
+  // ✅ NUEVO: Obtener la caja activa al montar el componente
+  useEffect(() => {
+    const obtenerCaja = async () => {
+      try {
+        const caja = await cajaService.getActiva();
+        setCajaActiva(caja);
+      } catch (err: any) {
+        setErrorVenta(
+          err.response?.data?.message ||
+            "No se pudo obtener la caja activa. ¿Abriste caja hoy?",
+        );
+      } finally {
+        setCargandoCaja(false);
+      }
+    };
+    obtenerCaja();
+  }, []);
 
   // Buscar productos
   useEffect(() => {
@@ -87,6 +111,13 @@ export default function POSPage() {
 
   const onSubmit = async (datos: VentaFormData) => {
     if (items.length === 0) return;
+
+    // ✅ NUEVO: Validar que exista una caja activa antes de vender
+    if (!cajaActiva) {
+      setErrorVenta("No hay una caja activa. No se puede procesar la venta.");
+      return;
+    }
+
     if (hayStockInsuficiente()) {
       setErrorVenta("Hay productos con cantidad mayor al stock disponible.");
       return;
@@ -102,7 +133,7 @@ export default function POSPage() {
       }));
 
       const respuesta = await ventaService.create({
-        cajaId: 7, // Fallback: asume caja 1 abierta
+        cajaId: cajaActiva.id, // ✅ DINÁMICO: Usa el ID real de la caja obtenida del backend
         tipo: "POS",
         metodoPago: datos.metodoPago,
         observaciones: datos.observaciones,
@@ -130,6 +161,39 @@ export default function POSPage() {
     setVentaExitosa(null);
     setErrorVenta(null);
   };
+
+  // ✅ NUEVO: Pantalla de carga mientras verifica la caja
+  if (cargandoCaja) {
+    return (
+      <div className="flex h-[calc(100vh-8rem)] items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-slate-600">Verificando estado de la caja...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // ✅ NUEVO: Pantalla de error si no hay caja abierta
+  if (!cajaActiva && !cargandoCaja) {
+    return (
+      <div className="flex h-[calc(100vh-8rem)] items-center justify-center">
+        <div className="bg-red-50 border border-red-200 rounded-lg p-8 text-center max-w-md">
+          <AlertCircle size={48} className="mx-auto text-red-500 mb-4" />
+          <h2 className="text-xl font-bold text-red-700 mb-2">
+            Caja Cerrada o No Encontrada
+          </h2>
+          <p className="text-red-600 mb-4">
+            {errorVenta ||
+              "Debes abrir una caja antes de poder realizar ventas."}
+          </p>
+          <Boton variante="primario" onClick={() => window.location.reload()}>
+            Reintentar
+          </Boton>
+        </div>
+      </div>
+    );
+  }
 
   // Si hay una venta exitosa, mostrar comprobante
   if (ventaExitosa) {
