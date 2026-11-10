@@ -91,7 +91,7 @@ export default function CajerosPage() {
     }
   };
 
-  const handleEliminarUsuario = async (id: number, nombre: string) => {
+  const handleEliminarUsuario = async (_id: number, nombre: string) => {
     if (window.confirm(`¿Estás seguro de eliminar al usuario ${nombre}?`)) {
       try {
         // TODO: Reemplazar con el endpoint real

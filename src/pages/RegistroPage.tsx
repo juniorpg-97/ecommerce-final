@@ -1,40 +1,33 @@
-import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { Mail, Lock, User, UserPlus, AlertCircle } from "lucide-react";
+import { Mail, Lock, User, UserPlus } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { CampoTexto } from "../componentes/ui/CampoTexto";
 import { Boton } from "../componentes/ui/Boton";
 import { authService } from "../services/auth";
 import { mensajeError } from "../lib/errores";
-import type { RegistroDTO } from "../types/auth";
+import { registroSchema, type RegistroFormData } from "../schemas/auth";
 
 export default function RegistroPage() {
   const navigate = useNavigate();
 
-  const [nombre, setNombre] = useState<string>("");
-  const [apellido, setApellido] = useState<string>("");
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [enviando, setEnviando] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<RegistroFormData>({
+    resolver: zodResolver(registroSchema),
+  });
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setError(null);
-    setEnviando(true);
-
+  const onSubmit = async (datos: RegistroFormData) => {
     try {
-      const datos: RegistroDTO = { nombre, apellido, email, password };
       await authService.register(datos);
-
-      // Registro exitoso, redirigir al login con mensaje
       navigate("/login", {
         replace: true,
         state: { mensaje: "Registro exitoso. Ahora inicia sesión." },
       });
-    } catch (err: unknown) {
-      setError(mensajeError(err, "Error al registrarse. Intenta de nuevo."));
-    } finally {
-      setEnviando(false);
+    } catch (err) {
+      alert(mensajeError(err, "Error al registrarse. Intenta de nuevo."));
     }
   };
 
@@ -54,29 +47,23 @@ export default function RegistroPage() {
 
         {/* Formulario */}
         <div className="bg-white rounded-xl shadow-lg border border-slate-200 p-8">
-          <form onSubmit={handleSubmit} className="space-y-5">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
             <div className="grid grid-cols-2 gap-4">
               <CampoTexto
                 id="nombre"
                 etiqueta="Nombre"
                 placeholder="Carlos"
-                value={nombre}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setNombre(e.target.value)
-                }
                 icono={<User size={18} />}
-                required
+                error={errors.nombre?.message}
+                {...register("nombre")}
               />
               <CampoTexto
                 id="apellido"
                 etiqueta="Apellido"
                 placeholder="Vega"
-                value={apellido}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setApellido(e.target.value)
-                }
                 icono={<User size={18} />}
-                required
+                error={errors.apellido?.message}
+                {...register("apellido")}
               />
             </div>
 
@@ -85,37 +72,22 @@ export default function RegistroPage() {
               etiqueta="Correo Electrónico"
               type="email"
               placeholder="usuario@voltix.com"
-              value={email}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setEmail(e.target.value)
-              }
               icono={<Mail size={18} />}
-              required
               autoComplete="email"
+              error={errors.email?.message}
+              {...register("email")}
             />
 
             <CampoTexto
               id="password"
               etiqueta="Contraseña"
               type="password"
-              placeholder="Mínimo 8 caracteres"
-              value={password}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setPassword(e.target.value)
-              }
+              placeholder="Mínimo 8 caracteres, 1 mayúscula y 1 número"
               icono={<Lock size={18} />}
-              required
               autoComplete="new-password"
-              minLength={8}
+              error={errors.password?.message}
+              {...register("password")}
             />
-
-            {/* Mensaje de error */}
-            {error && (
-              <div className="flex items-start gap-2 p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm">
-                <AlertCircle size={16} className="mt-0.5 flex-shrink-0" />
-                <span>{error}</span>
-              </div>
-            )}
 
             {/* Términos y condiciones */}
             <label className="flex items-start gap-2 cursor-pointer">
@@ -141,10 +113,10 @@ export default function RegistroPage() {
               type="submit"
               variante="primario"
               anchoCompleto
-              disabled={enviando}
+              disabled={isSubmitting}
               className="h-12 text-base"
             >
-              {enviando ? (
+              {isSubmitting ? (
                 <span className="flex items-center gap-2">
                   <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
                     <circle
