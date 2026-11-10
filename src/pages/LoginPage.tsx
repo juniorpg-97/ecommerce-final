@@ -1,42 +1,46 @@
-import { useState } from "react";
 import { Navigate, useNavigate, Link } from "react-router-dom";
 import { Mail, Lock, LogIn, AlertCircle } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { CampoTexto } from "../componentes/ui/CampoTexto";
 import { Boton } from "../componentes/ui/Boton";
 import { useAuthStore } from "../store/authStore";
-import { mensajeError } from "../lib/errores";
-import type { LoginDTO } from "../types/auth";
+import { loginSchema, type LoginFormData } from "../schemas/auth";
 
 export default function LoginPage() {
   const navigate = useNavigate();
   const login = useAuthStore((s) => s.login);
   const autenticado = useAuthStore((s) => s.autenticado);
+  const usuarioRol = useAuthStore((s) => s.usuarioRol);
+  const errorStore = useAuthStore((s) => s.error);
 
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [enviando, setEnviando] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<LoginFormData>({
+    resolver: zodResolver(loginSchema),
+  });
 
-  // Si ya está autenticado, redirigir
+  // Si ya está autenticado, redirigir según el rol
   if (autenticado) {
+    if (usuarioRol === "ADMINISTRADOR" || usuarioRol === "CAJERO") {
+      return <Navigate to="/dashboard" replace />;
+    }
     return <Navigate to="/" replace />;
   }
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setError(null);
-    setEnviando(true);
-
+  const onSubmit = async (datos: LoginFormData) => {
     try {
-      const datos: LoginDTO = { email, password };
-      await login(datos);
-      navigate("/", { replace: true });
-    } catch (err: unknown) {
-      setError(
-        mensajeError(err, "Credenciales incorrectas. Intenta de nuevo."),
-      );
-    } finally {
-      setEnviando(false);
+      const rol = await login(datos);
+
+      if (rol === "ADMINISTRADOR" || rol === "CAJERO") {
+        navigate("/dashboard", { replace: true });
+      } else {
+        navigate("/", { replace: true });
+      }
+    } catch (err) {
+      // El error ya se maneja en el store
     }
   };
 
@@ -56,19 +60,16 @@ export default function LoginPage() {
 
         {/* Formulario */}
         <div className="bg-white rounded-xl shadow-lg border border-slate-200 p-8">
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             <CampoTexto
               id="email"
               etiqueta="Correo Electrónico"
               type="email"
               placeholder="usuario@voltix.com"
-              value={email}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setEmail(e.target.value)
-              }
               icono={<Mail size={18} />}
-              required
               autoComplete="email"
+              error={errors.email?.message}
+              {...register("email")}
             />
 
             <CampoTexto
@@ -76,20 +77,17 @@ export default function LoginPage() {
               etiqueta="Contraseña"
               type="password"
               placeholder="••••••••"
-              value={password}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setPassword(e.target.value)
-              }
               icono={<Lock size={18} />}
-              required
               autoComplete="current-password"
+              error={errors.password?.message}
+              {...register("password")}
             />
 
-            {/* Mensaje de error */}
-            {error && (
+            {/* Mensaje de error del store */}
+            {errorStore && (
               <div className="flex items-start gap-2 p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm">
                 <AlertCircle size={16} className="mt-0.5 flex-shrink-0" />
-                <span>{error}</span>
+                <span>{errorStore}</span>
               </div>
             )}
 
@@ -115,10 +113,10 @@ export default function LoginPage() {
               type="submit"
               variante="primario"
               anchoCompleto
-              disabled={enviando}
+              disabled={isSubmitting}
               className="h-12 text-base"
             >
-              {enviando ? (
+              {isSubmitting ? (
                 <span className="flex items-center gap-2">
                   <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
                     <circle

@@ -93,6 +93,11 @@ export const productoService = {
     });
     return respuesta.data.map(convertirProducto);
   },
+  getPublicos: async (categoriaId?: number) => {
+    const params = categoriaId ? { categoriaId: categoriaId.toString() } : {};
+    const respuesta = await api.get("/productos/publicos", { params });
+    return respuesta.data;
+  },
 
   getPagina: async (
     pagina: number,

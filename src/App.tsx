@@ -18,6 +18,9 @@ import VitrinaPage from "./pages/VitrinaPage";
 import DashboardPage from "./pages/DashboardPage";
 import ProductosPage from "./pages/ProductosPage";
 import CajerosPage from "./pages/CajerosPage";
+import NuevoProductoPage from "./pages/NuevoProductoPage";
+import POSPage from "./pages/POSPage";
+import HistorialVentasPage from "./pages/HistorialVentasPage"; // <-- NUEVO
 
 // Páginas Generales
 import SinAccesoPage from "./pages/SinAcceso";
@@ -59,17 +62,21 @@ function App() {
         <Route path="/sin-acceso" element={<SinAccesoPage />} />
 
         {/* ======================================================
-            3. RUTAS PROTEGIDAS (Staff)
+            3. RUTAS PROTEGIDAS (Staff: ADMIN y CAJERO)
         ====================================================== */}
-        <Route element={<RutaProtegida />}>
+        <Route
+          element={
+            <RutaProtegida rolesPermitidos={["ADMINISTRADOR", "CAJERO"]} />
+          }
+        >
           <Route element={<LayoutStaff />}>
-            {/* Dashboard: Accesible para Admin y Cajero */}
             <Route path="/dashboard" element={<DashboardPage />} />
-
-            {/* Productos: Accesible para Admin y Cajero (según consigna, staff administra catálogo) */}
             <Route path="/productos" element={<ProductosPage />} />
+            <Route path="/productos/nuevo" element={<NuevoProductoPage />} />
+            <Route path="/pos" element={<POSPage />} />
+            <Route path="/historial-ventas" element={<HistorialVentasPage />} />
 
-            {/* Cajeros: SOLO para Administrador */}
+            {/* Rutas SOLO para Administrador (anidadas) */}
             <Route
               element={<RutaProtegida rolesPermitidos={["ADMINISTRADOR"]} />}
             >

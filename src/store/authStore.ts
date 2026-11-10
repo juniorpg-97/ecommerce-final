@@ -10,7 +10,7 @@ interface AuthState {
   error: string | null;
 
   verificarSesion: () => void;
-  login: (datos: LoginDTO) => Promise<void>;
+  login: (datos: LoginDTO) => Promise<string>; // ✅ Cambiado a Promise<string>
   logout: () => void;
 }
 
@@ -40,6 +40,10 @@ export const useAuthStore = create<AuthState>()((set) => ({
     try {
       const respuesta = await authService.login(datos);
 
+      if (!respuesta || !respuesta.token || !respuesta.usuario) {
+        throw new Error("Respuesta inválida del servidor");
+      }
+
       const { token, usuario } = respuesta;
       const nombreCompleto = `${usuario.nombre} ${usuario.apellido}`.trim();
 
@@ -54,6 +58,8 @@ export const useAuthStore = create<AuthState>()((set) => ({
         usuarioRol: usuario.rol,
         error: null,
       });
+
+      return usuario.rol; // ✅ Retorna el rol
     } catch (err: unknown) {
       const mensaje = err instanceof Error ? err.message : "Error de conexión";
       set({ error: mensaje });

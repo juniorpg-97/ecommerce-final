@@ -4,7 +4,6 @@ import { categoriaService } from "../services/categorias";
 import type { ProductoConDetalles } from "../types/Producto";
 import type { Categoria } from "../types/Categoria";
 import { ShoppingCart, Package, Search, AlertCircle } from "lucide-react";
-import { Link } from "react-router-dom";
 
 export default function VitrinaPage() {
   const [productos, setProductos] = useState<ProductoConDetalles[]>([]);
@@ -18,10 +17,15 @@ export default function VitrinaPage() {
     setCargando(true);
     setError(null);
     try {
-      const cats = await categoriaService.getAll(true);
+      // ❌ ANTES (requiere autenticación):
+      // const cats = await categoriaService.getAll(true);
+
+      // ✅ DESPUÉS (endpoint público):
+      const cats = await categoriaService.getPublicas();
       setCategorias(cats);
 
-      const prods = await productoService.getAll();
+      // ✅ Endpoint público de productos (sin costo de adquisición):
+      const prods = await productoService.getPublicos();
       setProductos(prods);
     } catch (err: unknown) {
       setError("Error al cargar el catálogo. Intenta más tarde.");
@@ -34,12 +38,7 @@ export default function VitrinaPage() {
     cargarDatos();
   }, []);
 
-  // Filtrar productos (ocultar los de stock 0 en la vitrina pública)
-  const productosDisponibles = productos.filter(
-    (p) => (p.inventario?.stock ?? 0) > 0,
-  );
-
-  const productosFiltrados = productosDisponibles.filter((producto) => {
+  const productosFiltrados = productos.filter((producto) => {
     const coincideCategoria =
       categoriaFiltro === "todas" ||
       producto.categoria.nombre === categoriaFiltro;
