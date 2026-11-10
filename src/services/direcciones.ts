@@ -116,4 +116,10 @@ export const direccionService = {
   delete: async (id: number): Promise<void> => {
     await api.delete(`/direcciones/${id}`);
   },
+  getMisDirecciones: async (): Promise<Direccion[]> => {
+    const respuesta = await api.get<DireccionApi[]>(
+      "/direcciones/mis-direcciones",
+    );
+    return respuesta.data.map(convertirDireccion);
+  },
 };
