@@ -5,14 +5,8 @@ import { categoriaService } from "../services/categorias";
 import { useCarritoClienteStore } from "../store/carritoClienteStore";
 import type { ProductoConDetalles } from "../types/Producto";
 import type { Categoria } from "../types/Categoria";
-import {
-  ShoppingCart,
-  Package,
-  Search,
-  AlertCircle,
-  Check,
-} from "lucide-react";
-import { CardProducto } from "../componentes/CardProducto"; // ✅ IMPORTAR COMPONENTE
+import { ShoppingCart, Package, Search, AlertCircle } from "lucide-react";
+import { CardProducto } from "../componentes/CardProducto";
 
 export default function VitrinaPage() {
   const navigate = useNavigate();
@@ -37,7 +31,7 @@ export default function VitrinaPage() {
       setCategorias(cats);
 
       const prods = await productoService.getPublicos();
-      console.log(" Productos recibidos:", prods); // Debug
+      console.log(" Productos recibidos:", prods);
       setProductos(prods);
     } catch (err: unknown) {
       setError("Error al cargar el catálogo. Intenta más tarde.");
@@ -89,9 +83,9 @@ export default function VitrinaPage() {
   }, [productos, categoriaFiltro, busqueda]);
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-[#0F172A]">
       {/* Hero Section */}
-      <div className="bg-gradient-to-br from-blue-600 to-blue-800 text-white py-12 px-4 relative">
+      <div className="bg-gradient-to-br from-[#3B82F6] to-[#1E40AF] text-white py-12 px-4 relative">
         <div className="max-w-7xl mx-auto flex justify-between items-start">
           <div>
             <h1 className="text-4xl font-bold mb-2">Bienvenido a Voltix.OS</h1>
@@ -102,12 +96,12 @@ export default function VitrinaPage() {
 
           <button
             onClick={() => navigate("/checkout")}
-            className="relative bg-white text-blue-700 px-4 py-2 rounded-lg font-semibold shadow-lg hover:bg-blue-50 transition-colors flex items-center gap-2"
+            className="relative bg-[#3B82F6] text-white px-4 py-2 rounded-lg font-semibold shadow-lg hover:bg-[#2563EB] transition-colors flex items-center gap-2"
           >
             <ShoppingCart size={20} />
             <span>Ver Carrito</span>
             {contarItems() > 0 && (
-              <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center">
+              <span className="absolute -top-2 -right-2 bg-[#EF4444] text-white text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center">
                 {contarItems()}
               </span>
             )}
@@ -117,20 +111,26 @@ export default function VitrinaPage() {
 
       {/* Filtros y Búsqueda */}
       <div className="max-w-7xl mx-auto px-4 py-6">
-        <div className="bg-white rounded-lg shadow-sm border border-slate-200 p-4">
+        <div className="bg-[#1E293B] rounded-lg shadow-lg border border-[#334155] p-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
+              <label className="block text-sm font-medium text-[#F1F5F9] mb-2">
                 Categoría:
               </label>
               <select
                 value={categoriaFiltro}
                 onChange={(e) => setCategoriaFiltro(e.target.value)}
-                className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-800 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 focus:outline-none"
+                className="w-full rounded-lg border border-[#334155] bg-[#0F172A] px-3 py-2 text-sm text-[#F1F5F9] focus:border-[#3B82F6] focus:ring-2 focus:ring-blue-500/20 focus:outline-none"
               >
-                <option value="todas">Todas las categorías</option>
+                <option value="todas" className="bg-[#0F172A]">
+                  Todas las categorías
+                </option>
                 {categorias.map((cat) => (
-                  <option key={cat.id} value={cat.nombre}>
+                  <option
+                    key={cat.id}
+                    value={cat.nombre}
+                    className="bg-[#0F172A]"
+                  >
                     {cat.nombre}
                   </option>
                 ))}
@@ -138,12 +138,12 @@ export default function VitrinaPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
+              <label className="block text-sm font-medium text-[#F1F5F9] mb-2">
                 Buscar:
               </label>
               <div className="relative">
                 <Search
-                  className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-[#94A3B8]"
                   size={18}
                 />
                 <input
@@ -151,7 +151,7 @@ export default function VitrinaPage() {
                   placeholder="Nombre del producto..."
                   value={busqueda}
                   onChange={(e) => setBusqueda(e.target.value)}
-                  className="w-full pl-10 pr-3 py-2 rounded-lg border border-slate-300 bg-white text-sm text-slate-800 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 focus:outline-none"
+                  className="w-full pl-10 pr-3 py-2 rounded-lg border border-[#334155] bg-[#0F172A] text-sm text-[#F1F5F9] placeholder-[#64748B] focus:border-[#3B82F6] focus:ring-2 focus:ring-blue-500/20 focus:outline-none"
                 />
               </div>
             </div>
@@ -163,13 +163,13 @@ export default function VitrinaPage() {
       <div className="max-w-7xl mx-auto px-4 pb-12">
         {cargando && (
           <div className="text-center py-12">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-            <p className="text-slate-600">Cargando catálogo...</p>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#3B82F6] mx-auto mb-4"></div>
+            <p className="text-[#94A3B8]">Cargando catálogo...</p>
           </div>
         )}
 
         {error && (
-          <div className="flex items-center gap-2 p-4 rounded-lg bg-red-50 border border-red-200 text-red-700">
+          <div className="flex items-center gap-2 p-4 rounded-lg bg-red-950/30 border border-red-900/50 text-red-400">
             <AlertCircle size={20} />
             <span>{error}</span>
           </div>
@@ -179,14 +179,13 @@ export default function VitrinaPage() {
           <>
             {productosFiltrados.length === 0 ? (
               <div className="text-center py-12">
-                <Package size={48} className="mx-auto text-slate-400 mb-4" />
-                <p className="text-slate-600 text-lg">
+                <Package size={48} className="mx-auto text-[#94A3B8] mb-4" />
+                <p className="text-[#94A3B8] text-lg">
                   No se encontraron productos disponibles.
                 </p>
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {/* ✅ USAR COMPONENTE CardProducto */}
                 {productosFiltrados.map((producto) => (
                   <CardProducto
                     key={producto.id}

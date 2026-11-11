@@ -6,7 +6,7 @@ import { z } from "zod";
 import { ShoppingCart, CreditCard, AlertTriangle } from "lucide-react";
 import { useCarritoClienteStore } from "../store/carritoClienteStore";
 import { pedidoService } from "../services/pedidos";
-import { direccionService } from "../services/direcciones"; // Tu servicio actualizado
+import { direccionService } from "../services/direcciones";
 import { carritoService } from "../services/carrito";
 import { Boton } from "../componentes/ui/Boton";
 import type { Direccion } from "../types/Direccion";
@@ -47,7 +47,6 @@ export default function CheckoutPage() {
 
   const total = calcularSubtotal();
 
-  // Cargar direcciones del cliente autenticado
   useEffect(() => {
     const cargarDirecciones = async () => {
       try {
@@ -69,14 +68,23 @@ export default function CheckoutPage() {
 
   if (items.length === 0) {
     return (
-      <div className="max-w-2xl mx-auto text-center py-12">
-        <ShoppingCart size={48} className="mx-auto text-slate-400 mb-4" />
-        <h2 className="text-xl font-bold text-slate-900 mb-2">
-          Tu carrito está vacío
-        </h2>
-        <Boton variante="primario" onClick={() => navigate("/")}>
-          Volver a la tienda
-        </Boton>
+      <div
+        className="min-h-screen flex items-center justify-center"
+        style={{ backgroundColor: "#0F172A" }}
+      >
+        <div className="bg-[#1E293B] border border-[#334155] rounded-xl shadow-xl p-8 text-center max-w-md">
+          <ShoppingCart size={64} className="mx-auto text-[#64748B] mb-4" />
+          <h2 className="text-2xl font-bold text-[#F1F5F9] mb-6">
+            Tu carrito está vacío
+          </h2>
+          <Boton
+            variante="primario"
+            onClick={() => navigate("/")}
+            className="bg-[#3B82F6] hover:bg-[#2563EB] text-white font-semibold px-8 py-3 rounded-lg shadow-lg shadow-blue-500/20 transition-all"
+          >
+            Volver a la tienda
+          </Boton>
+        </div>
       </div>
     );
   }
@@ -93,7 +101,6 @@ export default function CheckoutPage() {
     setError(null);
 
     try {
-      // 1. Sincronizar carrito con la BD
       const detallesParaBD = items.map((item) => ({
         productoId: item.productoId,
         cantidad: item.cantidad,
@@ -101,13 +108,11 @@ export default function CheckoutPage() {
       }));
       await carritoService.sincronizar(detallesParaBD);
 
-      // 2. Crear el pedido
       await pedidoService.create({
         direccionId: datos.direccionId,
         metodoPago: datos.metodoPago,
       });
 
-      // 3. Limpiar y redirigir
       limpiarCarrito();
       navigate("/", { replace: true });
     } catch (err: any) {
@@ -123,38 +128,44 @@ export default function CheckoutPage() {
 
   if (cargandoDirecciones) {
     return (
-      <div className="flex h-screen items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      <div
+        className="min-h-screen flex items-center justify-center"
+        style={{ backgroundColor: "#0F172A" }}
+      >
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#3B82F6]"></div>
       </div>
     );
   }
 
   return (
-    <div className="max-w-4xl mx-auto py-8 px-4">
-      <h1 className="text-2xl font-bold text-slate-900 mb-6">
+    <div
+      className="max-w-4xl mx-auto py-8 px-4 min-h-screen"
+      style={{ backgroundColor: "#0F172A" }}
+    >
+      <h1 className="text-2xl font-bold text-[#F1F5F9] mb-6">
         Finalizar Compra
       </h1>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Resumen del Pedido */}
         <div className="lg:col-span-2 space-y-4">
-          <div className="bg-white rounded-lg border border-slate-200 p-4">
-            <h2 className="font-semibold text-slate-900 mb-4">
+          <div className="bg-[#1E293B] rounded-lg border border-[#334155] shadow-lg p-4">
+            <h2 className="font-semibold text-[#F1F5F9] mb-4">
               Productos ({items.length})
             </h2>
             {items.map((item) => (
               <div
                 key={item.productoId}
-                className="flex justify-between items-center py-3 border-b border-slate-100 last:border-0"
+                className="flex justify-between items-center py-3 border-b border-[#334155] last:border-0"
               >
                 <div>
-                  <p className="font-medium text-slate-900">{item.nombre}</p>
-                  <p className="text-sm text-slate-600">
+                  <p className="font-medium text-[#F1F5F9]">{item.nombre}</p>
+                  <p className="text-sm text-[#94A3B8]">
                     Cantidad: {item.cantidad}
                   </p>
                 </div>
-                <p className="font-mono font-semibold">
-                  ${(item.precioUnitario * item.cantidad).toFixed(2)}
+                <p className="font-mono font-semibold text-[#3B82F6]">
+                  S/{(item.precioUnitario * item.cantidad).toFixed(2)}
                 </p>
               </div>
             ))}
@@ -162,23 +173,23 @@ export default function CheckoutPage() {
 
           <form
             onSubmit={handleSubmit(onSubmit)}
-            className="bg-white rounded-lg border border-slate-200 p-6 space-y-6"
+            className="bg-[#1E293B] rounded-lg border border-[#334155] shadow-lg p-6 space-y-6"
           >
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
+              <label className="block text-sm font-medium text-[#F1F5F9] mb-2">
                 Dirección de Envío
               </label>
               {direcciones.length === 0 ? (
-                <p className="text-sm text-red-600">
+                <p className="text-sm text-[#EF4444]">
                   No tienes direcciones registradas. Agrégala desde tu perfil.
                 </p>
               ) : (
                 <select
                   {...register("direccionId", { valueAsNumber: true })}
-                  className="w-full px-3 py-2 rounded-lg border border-slate-300 focus:border-blue-500 outline-none"
+                  className="w-full px-3 py-2 rounded-lg border border-[#334155] bg-[#0F172A] text-[#F1F5F9] focus:border-[#3B82F6] outline-none transition-all"
                 >
                   {direcciones.map((d) => (
-                    <option key={d.id} value={d.id}>
+                    <option key={d.id} value={d.id} className="bg-[#0F172A]">
                       {d.calle} {d.numero}, {d.ciudad}{" "}
                       {d.referencia ? `(${d.referencia})` : ""}
                     </option>
@@ -186,30 +197,40 @@ export default function CheckoutPage() {
                 </select>
               )}
               {errors.direccionId && (
-                <p className="text-xs text-red-600 mt-1">
+                <p className="text-xs text-[#EF4444] mt-1">
                   {errors.direccionId.message}
                 </p>
               )}
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
+              <label className="block text-sm font-medium text-[#F1F5F9] mb-2">
                 Método de Pago
               </label>
               <select
                 {...register("metodoPago")}
-                className="w-full px-3 py-2 rounded-lg border border-slate-300 focus:border-blue-500 outline-none"
+                className="w-full px-3 py-2 rounded-lg border border-[#334155] bg-[#0F172A] text-[#F1F5F9] focus:border-[#3B82F6] outline-none transition-all"
               >
-                <option value="YAPE">Yape</option>
-                <option value="PLIN">Plin</option>
-                <option value="TRANSFERENCIA">Transferencia</option>
-                <option value="TARJETA">Tarjeta</option>
-                <option value="EFECTIVO">Efectivo contra entrega</option>
+                <option value="YAPE" className="bg-[#0F172A]">
+                  Yape
+                </option>
+                <option value="PLIN" className="bg-[#0F172A]">
+                  Plin
+                </option>
+                <option value="TRANSFERENCIA" className="bg-[#0F172A]">
+                  Transferencia
+                </option>
+                <option value="TARJETA" className="bg-[#0F172A]">
+                  Tarjeta
+                </option>
+                <option value="EFECTIVO" className="bg-[#0F172A]">
+                  Efectivo contra entrega
+                </option>
               </select>
             </div>
 
             {error && (
-              <div className="flex items-start gap-2 p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm">
+              <div className="flex items-start gap-2 p-3 rounded-lg bg-red-950/30 border border-red-900/50 text-red-400 text-sm">
                 <AlertTriangle size={16} className="mt-0.5 flex-shrink-0" />
                 <span>{error}</span>
               </div>
@@ -220,7 +241,7 @@ export default function CheckoutPage() {
               variante="primario"
               anchoCompleto
               disabled={procesando || direcciones.length === 0}
-              className="h-12 gap-2"
+              className="h-12 gap-2 bg-[#3B82F6] hover:bg-[#2563EB] text-white font-semibold shadow-lg shadow-blue-500/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {procesando ? (
                 <>
@@ -252,20 +273,22 @@ export default function CheckoutPage() {
         </div>
 
         {/* Total */}
-        <div className="bg-slate-50 rounded-lg border border-slate-200 p-6 h-fit">
-          <h3 className="font-semibold text-slate-900 mb-4">Resumen</h3>
+        <div className="bg-[#1E293B] rounded-lg border border-[#334155] shadow-lg p-6 h-fit">
+          <h3 className="font-semibold text-[#F1F5F9] mb-4">Resumen</h3>
           <div className="space-y-2 text-sm">
             <div className="flex justify-between">
-              <span className="text-slate-600">Subtotal</span>
-              <span className="font-mono">${total.toFixed(2)}</span>
+              <span className="text-[#94A3B8]">Subtotal</span>
+              <span className="font-mono text-[#F1F5F9]">
+                S/{total.toFixed(2)}
+              </span>
             </div>
             <div className="flex justify-between">
-              <span className="text-slate-600">Envío</span>
-              <span className="font-mono text-green-600">Gratis</span>
+              <span className="text-[#94A3B8]">Envío</span>
+              <span className="font-mono text-[#10B981]">Gratis</span>
             </div>
-            <div className="border-t border-slate-200 pt-2 mt-2 flex justify-between text-lg font-bold">
-              <span>Total</span>
-              <span>${total.toFixed(2)}</span>
+            <div className="border-t border-[#334155] pt-2 mt-2 flex justify-between text-lg font-bold">
+              <span className="text-[#F1F5F9]">Total</span>
+              <span className="text-[#3B82F6]">S/{total.toFixed(2)}</span>
             </div>
           </div>
         </div>

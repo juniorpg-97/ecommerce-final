@@ -1,32 +1,49 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap");
 
-/* Tailwind CSS v4 - Nueva sintaxis */
 @import "tailwindcss";
 
 @layer base {
   html {
-    @apply bg-surface text-on-surface font-body antialiased;
+    font-family:
+      "Inter",
+      system-ui,
+      -apple-system,
+      sans-serif;
+    background-color: #0f172a !important;
+    color: #f1f5f9;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
-  /* Scrollbar oscuro sutil */
+  body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    background-color: #0f172a !important;
+    color: #f1f5f9;
+  }
+
+  #root {
+    background-color: #0f172a !important;
+    min-height: 100vh;
+  }
+
+  /* Scrollbar personalizado */
   ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
   }
 
   ::-webkit-scrollbar-track {
-    @apply bg-surface-container-lowest;
+    background-color: #0f172a;
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply bg-surface-variant rounded-full;
+    background-color: #1e293b;
+    border-radius: 9999px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    @apply bg-outline;
+    background-color: #334155;
   }
-}
-
-@layer utilities {
-  /* Utilidades personalizadas si las necesitas */
 }

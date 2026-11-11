@@ -22,7 +22,6 @@ export default function LoginPage() {
     resolver: zodResolver(loginSchema),
   });
 
-  // Si ya está autenticado, redirigir según el rol
   if (autenticado) {
     if (usuarioRol === "ADMINISTRADOR" || usuarioRol === "CAJERO") {
       return <Navigate to="/dashboard" replace />;
@@ -45,21 +44,24 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
+    <div
+      className="min-h-screen flex items-center justify-center p-4"
+      style={{ backgroundColor: "#0F172A" }}
+    >
       <div className="w-full max-w-md">
         {/* Logo y título */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-blue-600 text-white mb-4">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-[#3B82F6] text-white mb-4 shadow-lg shadow-blue-500/20">
             <LogIn size={32} />
           </div>
-          <h1 className="text-3xl font-bold text-slate-900">
-            Voltix<span className="text-blue-600">.OS</span>
+          <h1 className="text-3xl font-bold text-[#F1F5F9]">
+            Voltix<span className="text-[#3B82F6]">.OS</span>
           </h1>
-          <p className="text-slate-600 mt-2">Inicia sesión para continuar</p>
+          <p className="text-[#94A3B8] mt-2">Inicia sesión para continuar</p>
         </div>
 
         {/* Formulario */}
-        <div className="bg-white rounded-xl shadow-lg border border-slate-200 p-8">
+        <div className="bg-[#1E293B] rounded-xl shadow-xl border border-[#334155] p-8">
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             <CampoTexto
               id="email"
@@ -83,38 +85,35 @@ export default function LoginPage() {
               {...register("password")}
             />
 
-            {/* Mensaje de error del store */}
             {errorStore && (
-              <div className="flex items-start gap-2 p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm">
+              <div className="flex items-start gap-2 p-3 rounded-lg bg-red-950/30 border border-red-900/50 text-red-400 text-sm">
                 <AlertCircle size={16} className="mt-0.5 flex-shrink-0" />
                 <span>{errorStore}</span>
               </div>
             )}
 
-            {/* Opciones adicionales */}
             <div className="flex items-center justify-between text-sm">
               <label className="flex items-center gap-2 cursor-pointer">
                 <input
                   type="checkbox"
-                  className="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+                  className="w-4 h-4 rounded border-[#475569] bg-[#0F172A] text-[#3B82F6] focus:ring-[#3B82F6] focus:ring-offset-0"
                 />
-                <span className="text-slate-600">Recordarme</span>
+                <span className="text-[#94A3B8]">Recordarme</span>
               </label>
               <a
                 href="#"
-                className="text-blue-600 hover:text-blue-700 hover:underline font-medium"
+                className="text-[#3B82F6] hover:text-[#2563EB] font-medium transition-colors"
               >
                 ¿Olvidaste tu contraseña?
               </a>
             </div>
 
-            {/* Botón de login */}
             <Boton
               type="submit"
               variante="primario"
               anchoCompleto
               disabled={isSubmitting}
-              className="h-12 text-base"
+              className="h-12 text-base bg-[#3B82F6] hover:bg-[#2563EB] text-white font-semibold shadow-lg shadow-blue-500/20 transition-all"
             >
               {isSubmitting ? (
                 <span className="flex items-center gap-2">
@@ -145,13 +144,12 @@ export default function LoginPage() {
             </Boton>
           </form>
 
-          {/* Enlace a registro */}
-          <div className="mt-6 text-center text-sm text-slate-600">
+          <div className="mt-6 text-center text-sm text-[#94A3B8]">
             <p>
               ¿No tienes una cuenta?{" "}
               <Link
                 to="/registro"
-                className="text-blue-600 hover:text-blue-700 font-semibold hover:underline"
+                className="text-[#3B82F6] hover:text-[#2563EB] font-semibold hover:underline transition-colors"
               >
                 Regístrate como cliente
               </Link>
@@ -159,8 +157,7 @@ export default function LoginPage() {
           </div>
         </div>
 
-        {/* Footer */}
-        <p className="text-center text-xs text-slate-500 mt-6">
+        <p className="text-center text-xs text-[#64748B] mt-6">
           © 2024 Voltix.OS - Sistema de Punto de Venta y E-commerce
         </p>
       </div>

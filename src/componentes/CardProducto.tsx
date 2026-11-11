@@ -107,7 +107,7 @@ export const CardProducto = memo(function CardProducto({
                 fontFamily: "'Plus Jakarta Sans', sans-serif",
               }}
             >
-              $
+              S/
               {Number(producto.precioVenta).toLocaleString("es-MX", {
                 minimumFractionDigits: 2,
               })}

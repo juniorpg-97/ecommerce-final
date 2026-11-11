@@ -71,20 +71,26 @@ export default function ProductosPage() {
   };
 
   return (
-    <div className="space-y-6">
+    <div
+      className="space-y-6 min-h-screen p-6"
+      style={{ backgroundColor: "#0F172A" }}
+    >
       {/* Encabezado */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
-            <Package className="text-blue-600" />
+          <h1 className="text-2xl font-bold text-[#F1F5F9] flex items-center gap-2">
+            <Package className="text-[#3B82F6]" />
             Gestión de Productos
           </h1>
-          <p className="text-slate-600 text-sm mt-1">
+          <p className="text-[#94A3B8] text-sm mt-1">
             Administra el catálogo, precios y stock del inventario.
           </p>
         </div>
         <Link to="/productos/nuevo">
-          <Boton variante="primario" className="gap-2">
+          <Boton
+            variante="primario"
+            className="gap-2 bg-[#3B82F6] hover:bg-[#2563EB] text-white font-semibold shadow-lg shadow-blue-500/20 transition-all"
+          >
             <Plus size={18} />
             <span>Nuevo Producto</span>
           </Boton>
@@ -92,21 +98,27 @@ export default function ProductosPage() {
       </div>
 
       {/* Filtros y Búsqueda */}
-      <div className="bg-white p-4 rounded-lg border border-slate-200 shadow-sm">
+      <div className="bg-[#1E293B] p-4 rounded-lg border border-[#334155] shadow-lg">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Filtro por categoría */}
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-2">
+            <label className="block text-sm font-medium text-[#F1F5F9] mb-2">
               Filtrar por Categoría:
             </label>
             <select
               value={categoriaFiltro}
               onChange={(e) => setCategoriaFiltro(e.target.value)}
-              className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-800 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 focus:outline-none"
+              className="w-full rounded-lg border border-[#334155] bg-[#0F172A] px-3 py-2 text-sm text-[#F1F5F9] focus:border-[#3B82F6] focus:ring-2 focus:ring-blue-500/20 focus:outline-none"
             >
-              <option value="todas">Todas las categorías</option>
+              <option value="todas" className="bg-[#0F172A]">
+                Todas las categorías
+              </option>
               {categorias.map((cat) => (
-                <option key={cat.id} value={cat.nombre}>
+                <option
+                  key={cat.id}
+                  value={cat.nombre}
+                  className="bg-[#0F172A]"
+                >
                   {cat.nombre}
                 </option>
               ))}
@@ -115,12 +127,12 @@ export default function ProductosPage() {
 
           {/* Búsqueda por nombre */}
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-2">
+            <label className="block text-sm font-medium text-[#F1F5F9] mb-2">
               Buscar Producto:
             </label>
             <div className="relative">
               <Search
-                className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-[#94A3B8]"
                 size={18}
               />
               <input
@@ -128,7 +140,7 @@ export default function ProductosPage() {
                 placeholder="Nombre o descripción..."
                 value={busqueda}
                 onChange={(e) => setBusqueda(e.target.value)}
-                className="w-full pl-10 pr-3 py-2 rounded-lg border border-slate-300 bg-white text-sm text-slate-800 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 focus:outline-none"
+                className="w-full pl-10 pr-3 py-2 rounded-lg border border-[#334155] bg-[#0F172A] text-sm text-[#F1F5F9] placeholder-[#64748B] focus:border-[#3B82F6] focus:ring-2 focus:ring-blue-500/20 focus:outline-none"
               />
             </div>
           </div>
@@ -137,14 +149,14 @@ export default function ProductosPage() {
 
       {/* Estado de carga o error */}
       {cargando && (
-        <div className="text-center py-12 text-slate-500">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-2"></div>
+        <div className="text-center py-12 text-[#94A3B8]">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#3B82F6] mx-auto mb-2"></div>
           Cargando productos...
         </div>
       )}
 
       {error && (
-        <div className="flex items-center gap-2 p-4 rounded-lg bg-red-50 border border-red-200 text-red-700">
+        <div className="flex items-center gap-2 p-4 rounded-lg bg-red-950/30 border border-red-900/50 text-red-400">
           <AlertTriangle size={20} />
           <span>{error}</span>
         </div>
@@ -152,10 +164,10 @@ export default function ProductosPage() {
 
       {/* Tabla de Productos */}
       {!cargando && !error && (
-        <div className="bg-white rounded-lg border border-slate-200 shadow-sm overflow-hidden">
+        <div className="bg-[#1E293B] rounded-lg border border-[#334155] shadow-lg overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-sm text-left">
-              <thead className="bg-slate-50 text-slate-700 font-semibold border-b border-slate-200">
+              <thead className="bg-[#0F172A] text-[#F1F5F9] font-semibold border-b border-[#334155]">
                 <tr>
                   <th className="px-6 py-3">Producto</th>
                   <th className="px-6 py-3">Categoría</th>
@@ -165,12 +177,12 @@ export default function ProductosPage() {
                   <th className="px-6 py-3 text-center">Acciones</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-200">
+              <tbody className="divide-y divide-[#334155]">
                 {productosFiltrados.length === 0 ? (
                   <tr>
                     <td
                       colSpan={6}
-                      className="px-6 py-8 text-center text-slate-500"
+                      className="px-6 py-8 text-center text-[#94A3B8]"
                     >
                       No se encontraron productos{" "}
                       {categoriaFiltro !== "todas" ? "en esta categoría" : ""}.
@@ -180,44 +192,44 @@ export default function ProductosPage() {
                   productosFiltrados.map((producto) => (
                     <tr
                       key={producto.id}
-                      className="hover:bg-slate-50 transition-colors"
+                      className="hover:bg-[#0F172A] transition-colors"
                     >
                       <td className="px-6 py-4">
-                        <div className="font-medium text-slate-900">
+                        <div className="font-medium text-[#F1F5F9]">
                           {producto.nombre}
                         </div>
                         {producto.descripcion && (
-                          <div className="text-slate-500 text-xs mt-1 truncate max-w-xs">
+                          <div className="text-[#94A3B8] text-xs mt-1 truncate max-w-xs">
                             {producto.descripcion}
                           </div>
                         )}
                       </td>
                       <td className="px-6 py-4">
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-700">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-500/10 text-[#3B82F6] border border-blue-500/30">
                           {producto.categoria.nombre}
                         </span>
                       </td>
-                      <td className="px-6 py-4 text-right font-mono text-slate-600">
-                        $
-                        {producto.costoAdquisicion.toLocaleString("es-MX", {
+                      <td className="px-6 py-4 text-right font-mono text-[#94A3B8]">
+                        S/
+                        {producto.costoAdquisicion.toLocaleString("es-PE", {
                           minimumFractionDigits: 2,
                         })}
                       </td>
-                      <td className="px-6 py-4 text-right font-mono font-semibold text-slate-900">
-                        $
-                        {producto.precioVenta.toLocaleString("es-MX", {
+                      <td className="px-6 py-4 text-right font-mono font-semibold text-[#F1F5F9]">
+                        S/
+                        {producto.precioVenta.toLocaleString("es-PE", {
                           minimumFractionDigits: 2,
                         })}
                       </td>
                       <td className="px-6 py-4 text-center">
                         <span
-                          className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                          className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${
                             producto.inventario?.stock === 0
-                              ? "bg-red-100 text-red-700"
+                              ? "bg-red-500/10 text-red-400 border-red-500/30"
                               : producto.inventario &&
                                   producto.inventario.stock < 5
-                                ? "bg-yellow-100 text-yellow-700"
-                                : "bg-green-100 text-green-700"
+                                ? "bg-orange-500/10 text-[#F97316] border-orange-500/30"
+                                : "bg-green-500/10 text-[#10B981] border-green-500/30"
                           }`}
                         >
                           {producto.inventario?.stock ?? 0} un.
@@ -227,14 +239,14 @@ export default function ProductosPage() {
                         <div className="flex items-center justify-center gap-2">
                           <Link
                             to={`/productos/${producto.id}/editar`}
-                            className="p-2 text-slate-500 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                            className="p-2 text-[#94A3B8] hover:text-[#3B82F6] hover:bg-blue-500/10 rounded-lg transition-colors"
                             title="Editar"
                           >
                             <Pencil size={18} />
                           </Link>
                           <button
                             onClick={() => handleEliminar(producto.id)}
-                            className="p-2 text-slate-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                            className="p-2 text-[#94A3B8] hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors"
                             title="Eliminar"
                           >
                             <Trash2 size={18} />
