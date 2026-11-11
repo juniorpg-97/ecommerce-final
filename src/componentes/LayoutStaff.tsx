@@ -1,6 +1,5 @@
 import { Outlet, Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuthStore } from "../store/authStore";
-import { Boton } from "./ui/Boton";
 import {
   LayoutDashboard,
   Package,
@@ -157,7 +156,7 @@ export default function LayoutStaff() {
             </p>
           </div>
 
-          {enlaces.slice(0, 3).map((enlace, index) => {
+          {enlaces.slice(0, 3).map((enlace, _index) => {
             if (enlace.children) return null;
             const Icono = enlace.icono;
             const isActive = enlace.path ? esActivo(enlace.path) : false;
