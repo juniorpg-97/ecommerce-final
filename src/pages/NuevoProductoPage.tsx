@@ -3,13 +3,13 @@ import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Package, Save, ArrowLeft, AlertCircle } from "lucide-react";
-import { CampoTexto } from "../componentes/ui/CampoTexto"; // ✅ ../ no ../../
-import { Boton } from "../componentes/ui/Boton"; // ✅
-import { productoService } from "../services/productos"; // ✅
-import { categoriaService } from "../services/categorias"; // ✅
-import { mensajeError } from "../lib/errores"; // ✅
-import { productoSchema, type ProductoFormData } from "../schemas/producto"; // ✅
-import type { Categoria } from "../types/Categoria"; // ✅
+import { CampoTexto } from "../componentes/ui/CampoTexto";
+import { Boton } from "../componentes/ui/Boton";
+import { productoService } from "../services/productos";
+import { categoriaService } from "../services/categorias";
+import { mensajeError } from "../lib/errores";
+import { productoSchema, type ProductoFormData } from "../schemas/producto";
+import type { Categoria } from "../types/Categoria";
 
 export default function NuevoProductoPage() {
   const navigate = useNavigate();
@@ -55,36 +55,42 @@ export default function NuevoProductoPage() {
 
   if (cargando) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      <div
+        className="flex items-center justify-center min-h-screen"
+        style={{ backgroundColor: "#0F172A" }}
+      >
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#3B82F6]"></div>
       </div>
     );
   }
 
   return (
-    <div className="max-w-3xl mx-auto space-y-6">
+    <div
+      className="max-w-3xl mx-auto space-y-6 min-h-screen p-6"
+      style={{ backgroundColor: "#0F172A" }}
+    >
       {/* Encabezado */}
       <div className="flex items-center gap-4">
         <button
           onClick={() => navigate("/productos")}
-          className="p-2 hover:bg-slate-100 rounded-lg transition-colors"
+          className="p-2 hover:bg-[#1E293B] rounded-lg transition-colors"
           title="Volver"
         >
-          <ArrowLeft size={20} className="text-slate-600" />
+          <ArrowLeft size={20} className="text-[#94A3B8]" />
         </button>
         <div>
-          <h1 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
-            <Package className="text-blue-600" />
+          <h1 className="text-2xl font-bold text-[#F1F5F9] flex items-center gap-2">
+            <Package className="text-[#3B82F6]" />
             Nuevo Producto
           </h1>
-          <p className="text-slate-600 text-sm mt-1">
+          <p className="text-[#94A3B8] text-sm mt-1">
             Agrega un nuevo producto al catálogo
           </p>
         </div>
       </div>
 
       {/* Formulario */}
-      <div className="bg-white rounded-lg border border-slate-200 shadow-sm p-6">
+      <div className="bg-[#1E293B] rounded-lg border border-[#334155] shadow-lg p-6">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           {/* Nombre */}
           <CampoTexto
@@ -99,7 +105,7 @@ export default function NuevoProductoPage() {
           <div className="space-y-1">
             <label
               htmlFor="descripcion"
-              className="block text-sm font-medium text-slate-700"
+              className="block text-sm font-medium text-[#F1F5F9]"
             >
               Descripción
             </label>
@@ -107,11 +113,11 @@ export default function NuevoProductoPage() {
               id="descripcion"
               rows={3}
               placeholder="Descripción del producto (opcional)"
-              className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-800 placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 focus:outline-none"
+              className="w-full rounded-lg border border-[#334155] bg-[#0F172A] px-3 py-2.5 text-sm text-[#F1F5F9] placeholder-[#64748B] focus:border-[#3B82F6] focus:ring-2 focus:ring-blue-500/20 focus:outline-none transition-all"
               {...register("descripcion")}
             />
             {errors.descripcion && (
-              <p className="text-xs text-red-600 mt-1">
+              <p className="text-xs text-[#EF4444] mt-1">
                 {errors.descripcion.message}
               </p>
             )}
@@ -122,7 +128,7 @@ export default function NuevoProductoPage() {
             <div className="space-y-1">
               <label
                 htmlFor="costoAdquisicion"
-                className="block text-sm font-medium text-slate-700"
+                className="block text-sm font-medium text-[#F1F5F9]"
               >
                 Costo de Adquisición ($)
               </label>
@@ -134,13 +140,13 @@ export default function NuevoProductoPage() {
                 placeholder="0.00"
                 className={`w-full rounded-lg border ${
                   errors.costoAdquisicion
-                    ? "border-red-500"
-                    : "border-slate-300"
-                } bg-white px-3 py-2.5 text-sm text-slate-800 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 focus:outline-none`}
+                    ? "border-[#EF4444]"
+                    : "border-[#334155]"
+                } bg-[#0F172A] px-3 py-2.5 text-sm text-[#F1F5F9] placeholder-[#64748B] focus:border-[#3B82F6] focus:ring-2 focus:ring-blue-500/20 focus:outline-none transition-all`}
                 {...register("costoAdquisicion", { valueAsNumber: true })}
               />
               {errors.costoAdquisicion && (
-                <p className="text-xs text-red-600 mt-1">
+                <p className="text-xs text-[#EF4444] mt-1">
                   {errors.costoAdquisicion.message}
                 </p>
               )}
@@ -149,7 +155,7 @@ export default function NuevoProductoPage() {
             <div className="space-y-1">
               <label
                 htmlFor="precioVenta"
-                className="block text-sm font-medium text-slate-700"
+                className="block text-sm font-medium text-[#F1F5F9]"
               >
                 Precio de Venta ($)
               </label>
@@ -160,12 +166,12 @@ export default function NuevoProductoPage() {
                 min="0.01"
                 placeholder="0.00"
                 className={`w-full rounded-lg border ${
-                  errors.precioVenta ? "border-red-500" : "border-slate-300"
-                } bg-white px-3 py-2.5 text-sm text-slate-800 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 focus:outline-none`}
+                  errors.precioVenta ? "border-[#EF4444]" : "border-[#334155]"
+                } bg-[#0F172A] px-3 py-2.5 text-sm text-[#F1F5F9] placeholder-[#64748B] focus:border-[#3B82F6] focus:ring-2 focus:ring-blue-500/20 focus:outline-none transition-all`}
                 {...register("precioVenta", { valueAsNumber: true })}
               />
               {errors.precioVenta && (
-                <p className="text-xs text-red-600 mt-1">
+                <p className="text-xs text-[#EF4444] mt-1">
                   {errors.precioVenta.message}
                 </p>
               )}
@@ -176,33 +182,35 @@ export default function NuevoProductoPage() {
           <div className="space-y-1">
             <label
               htmlFor="categoriaId"
-              className="block text-sm font-medium text-slate-700"
+              className="block text-sm font-medium text-[#F1F5F9]"
             >
               Categoría
             </label>
             <select
               id="categoriaId"
               className={`w-full rounded-lg border ${
-                errors.categoriaId ? "border-red-500" : "border-slate-300"
-              } bg-white px-3 py-2.5 text-sm text-slate-800 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 focus:outline-none`}
+                errors.categoriaId ? "border-[#EF4444]" : "border-[#334155]"
+              } bg-[#0F172A] px-3 py-2.5 text-sm text-[#F1F5F9] focus:border-[#3B82F6] focus:ring-2 focus:ring-blue-500/20 focus:outline-none transition-all`}
               {...register("categoriaId", { valueAsNumber: true })}
             >
-              <option value={0}>Selecciona una categoría</option>
+              <option value={0} className="bg-[#0F172A]">
+                Selecciona una categoría
+              </option>
               {categorias.map((cat) => (
-                <option key={cat.id} value={cat.id}>
+                <option key={cat.id} value={cat.id} className="bg-[#0F172A]">
                   {cat.nombre}
                 </option>
               ))}
             </select>
             {errors.categoriaId && (
-              <p className="text-xs text-red-600 mt-1">
+              <p className="text-xs text-[#EF4444] mt-1">
                 {errors.categoriaId.message}
               </p>
             )}
           </div>
 
           {/* Nota informativa */}
-          <div className="flex items-start gap-2 p-3 rounded-lg bg-blue-50 border border-blue-200 text-blue-700 text-sm">
+          <div className="flex items-start gap-2 p-3 rounded-lg bg-blue-500/10 border border-blue-500/30 text-blue-400 text-sm">
             <AlertCircle size={16} className="mt-0.5 flex-shrink-0" />
             <div>
               <p className="font-medium">Información importante</p>
@@ -214,12 +222,12 @@ export default function NuevoProductoPage() {
           </div>
 
           {/* Botones */}
-          <div className="flex gap-3 pt-4 border-t border-slate-200">
+          <div className="flex gap-3 pt-4 border-t border-[#334155]">
             <Boton
               type="submit"
               variante="primario"
               disabled={isSubmitting}
-              className="gap-2"
+              className="gap-2 bg-[#3B82F6] hover:bg-[#2563EB] text-white font-semibold shadow-lg shadow-blue-500/20 transition-all"
             >
               {isSubmitting ? (
                 <>
@@ -252,6 +260,7 @@ export default function NuevoProductoPage() {
               type="button"
               variante="fantasma"
               onClick={() => navigate("/productos")}
+              className="text-[#94A3B8] hover:text-[#F1F5F9] hover:bg-[#0F172A] transition-all"
             >
               Cancelar
             </Boton>

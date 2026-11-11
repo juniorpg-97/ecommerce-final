@@ -105,22 +105,25 @@ export default function CajerosPage() {
   };
 
   return (
-    <div className="space-y-6">
+    <div
+      className="space-y-6 min-h-screen p-6"
+      style={{ backgroundColor: "#0F172A" }}
+    >
       {/* Encabezado */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
-            <Users className="text-blue-600" />
+          <h1 className="text-2xl font-bold text-[#F1F5F9] flex items-center gap-2">
+            <Users className="text-[#3B82F6]" />
             Gestión de Usuarios
           </h1>
-          <p className="text-slate-600 text-sm mt-1">
+          <p className="text-[#94A3B8] text-sm mt-1">
             Crea y administra usuarios Cajero y Administrador.
           </p>
         </div>
         <Boton
           variante="primario"
           onClick={() => setMostrarFormulario(!mostrarFormulario)}
-          className="gap-2"
+          className="gap-2 bg-[#3B82F6] hover:bg-[#2563EB] text-white font-semibold shadow-lg shadow-blue-500/20 transition-all"
         >
           <Plus size={18} />
           <span>{mostrarFormulario ? "Cancelar" : "Nuevo Usuario"}</span>
@@ -129,9 +132,9 @@ export default function CajerosPage() {
 
       {/* Formulario de Creación */}
       {mostrarFormulario && (
-        <div className="bg-white rounded-lg border border-slate-200 shadow-sm p-6">
-          <h2 className="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
-            <UserCheck size={20} className="text-blue-600" />
+        <div className="bg-[#1E293B] rounded-lg border border-[#334155] shadow-lg p-6">
+          <h2 className="text-lg font-semibold text-[#F1F5F9] mb-4 flex items-center gap-2">
+            <UserCheck size={20} className="text-[#3B82F6]" />
             Crear Nuevo Usuario
           </h2>
 
@@ -186,15 +189,15 @@ export default function CajerosPage() {
 
             {/* Selector de Rol */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
+              <label className="block text-sm font-medium text-[#F1F5F9] mb-2">
                 Rol del Usuario:
               </label>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <label
                   className={`flex items-center gap-3 p-4 rounded-lg border-2 cursor-pointer transition-all ${
                     rol === "CAJERO"
-                      ? "border-blue-600 bg-blue-50"
-                      : "border-slate-200 hover:border-slate-300"
+                      ? "border-[#3B82F6] bg-blue-500/10"
+                      : "border-[#334155] hover:border-[#475569] bg-[#0F172A]"
                   }`}
                 >
                   <input
@@ -203,14 +206,14 @@ export default function CajerosPage() {
                     value="CAJERO"
                     checked={rol === "CAJERO"}
                     onChange={() => setRol("CAJERO")}
-                    className="w-4 h-4 text-blue-600"
+                    className="w-4 h-4 text-[#3B82F6] focus:ring-[#3B82F6] bg-[#0F172A] border-[#475569]"
                   />
                   <div className="flex-1">
-                    <div className="font-semibold text-slate-900 flex items-center gap-2">
-                      <UserCheck size={16} className="text-blue-600" />
+                    <div className="font-semibold text-[#F1F5F9] flex items-center gap-2">
+                      <UserCheck size={16} className="text-[#3B82F6]" />
                       Cajero
                     </div>
-                    <div className="text-xs text-slate-600 mt-1">
+                    <div className="text-xs text-[#94A3B8] mt-1">
                       Acceso al punto de venta y productos
                     </div>
                   </div>
@@ -219,8 +222,8 @@ export default function CajerosPage() {
                 <label
                   className={`flex items-center gap-3 p-4 rounded-lg border-2 cursor-pointer transition-all ${
                     rol === "ADMINISTRADOR"
-                      ? "border-purple-600 bg-purple-50"
-                      : "border-slate-200 hover:border-slate-300"
+                      ? "border-purple-500 bg-purple-500/10"
+                      : "border-[#334155] hover:border-[#475569] bg-[#0F172A]"
                   }`}
                 >
                   <input
@@ -229,14 +232,14 @@ export default function CajerosPage() {
                     value="ADMINISTRADOR"
                     checked={rol === "ADMINISTRADOR"}
                     onChange={() => setRol("ADMINISTRADOR")}
-                    className="w-4 h-4 text-purple-600"
+                    className="w-4 h-4 text-purple-500 focus:ring-purple-500 bg-[#0F172A] border-[#475569]"
                   />
                   <div className="flex-1">
-                    <div className="font-semibold text-slate-900 flex items-center gap-2">
-                      <Shield size={16} className="text-purple-600" />
+                    <div className="font-semibold text-[#F1F5F9] flex items-center gap-2">
+                      <Shield size={16} className="text-purple-400" />
                       Administrador
                     </div>
-                    <div className="text-xs text-slate-600 mt-1">
+                    <div className="text-xs text-[#94A3B8] mt-1">
                       Acceso total, incluyendo gestión de usuarios
                     </div>
                   </div>
@@ -246,7 +249,7 @@ export default function CajerosPage() {
 
             {/* Mensaje de error */}
             {error && (
-              <div className="flex items-start gap-2 p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm">
+              <div className="flex items-start gap-2 p-3 rounded-lg bg-red-950/30 border border-red-900/50 text-red-400 text-sm">
                 <AlertCircle size={16} className="mt-0.5 flex-shrink-0" />
                 <span>{error}</span>
               </div>
@@ -258,7 +261,7 @@ export default function CajerosPage() {
                 type="submit"
                 variante="primario"
                 disabled={creando}
-                className="gap-2"
+                className="gap-2 bg-[#3B82F6] hover:bg-[#2563EB] text-white font-semibold shadow-lg shadow-blue-500/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {creando ? (
                   <>
@@ -291,6 +294,7 @@ export default function CajerosPage() {
                 type="button"
                 variante="fantasma"
                 onClick={() => setMostrarFormulario(false)}
+                className="text-[#94A3B8] hover:text-[#F1F5F9] hover:bg-[#0F172A] transition-all"
               >
                 Cancelar
               </Boton>
@@ -300,27 +304,27 @@ export default function CajerosPage() {
       )}
 
       {/* Lista de Usuarios */}
-      <div className="bg-white rounded-lg border border-slate-200 shadow-sm overflow-hidden">
-        <div className="px-6 py-4 border-b border-slate-200 bg-slate-50">
-          <h2 className="font-semibold text-slate-900">Usuarios Registrados</h2>
+      <div className="bg-[#1E293B] rounded-lg border border-[#334155] shadow-lg overflow-hidden">
+        <div className="px-6 py-4 border-b border-[#334155] bg-[#0F172A]">
+          <h2 className="font-semibold text-[#F1F5F9]">Usuarios Registrados</h2>
         </div>
 
         {cargando && (
           <div className="text-center py-12">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-2"></div>
-            <p className="text-slate-600">Cargando usuarios...</p>
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#3B82F6] mx-auto mb-2"></div>
+            <p className="text-[#94A3B8]">Cargando usuarios...</p>
           </div>
         )}
 
         {error && !cargando && (
-          <div className="p-4 text-center text-slate-600">{error}</div>
+          <div className="p-4 text-center text-[#94A3B8]">{error}</div>
         )}
 
         {!cargando && !error && usuarios.length === 0 && (
-          <div className="text-center py-12 text-slate-500">
-            <Users size={48} className="mx-auto text-slate-400 mb-4" />
+          <div className="text-center py-12 text-[#94A3B8]">
+            <Users size={48} className="mx-auto text-[#64748B] mb-4" />
             <p>No hay usuarios registrados aún.</p>
-            <p className="text-sm mt-1">
+            <p className="text-sm mt-1 text-[#64748B]">
               Haz clic en "Nuevo Usuario" para crear el primero.
             </p>
           </div>
@@ -329,7 +333,7 @@ export default function CajerosPage() {
         {!cargando && !error && usuarios.length > 0 && (
           <div className="overflow-x-auto">
             <table className="w-full text-sm text-left">
-              <thead className="bg-slate-50 text-slate-700 font-semibold border-b border-slate-200">
+              <thead className="bg-[#0F172A] text-[#F1F5F9] font-semibold border-b border-[#334155]">
                 <tr>
                   <th className="px-6 py-3">Nombre</th>
                   <th className="px-6 py-3">Email</th>
@@ -337,24 +341,24 @@ export default function CajerosPage() {
                   <th className="px-6 py-3 text-center">Acciones</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-200">
+              <tbody className="divide-y divide-[#334155]">
                 {usuarios.map((usuario) => (
                   <tr
                     key={usuario.id}
-                    className="hover:bg-slate-50 transition-colors"
+                    className="hover:bg-[#0F172A] transition-colors"
                   >
-                    <td className="px-6 py-4 font-medium text-slate-900">
+                    <td className="px-6 py-4 font-medium text-[#F1F5F9]">
                       {usuario.nombre} {usuario.apellido}
                     </td>
-                    <td className="px-6 py-4 text-slate-600">
+                    <td className="px-6 py-4 text-[#94A3B8]">
                       {usuario.email}
                     </td>
                     <td className="px-6 py-4">
                       <span
-                        className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                        className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium border ${
                           usuario.rol === "ADMINISTRADOR"
-                            ? "bg-purple-100 text-purple-700"
-                            : "bg-blue-100 text-blue-700"
+                            ? "bg-purple-500/10 text-purple-400 border-purple-500/30"
+                            : "bg-blue-500/10 text-blue-400 border-blue-500/30"
                         }`}
                       >
                         {usuario.rol === "ADMINISTRADOR" ? (
@@ -373,7 +377,7 @@ export default function CajerosPage() {
                             `${usuario.nombre} ${usuario.apellido}`,
                           )
                         }
-                        className="p-2 text-slate-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                        className="p-2 text-[#94A3B8] hover:text-[#EF4444] hover:bg-red-500/10 rounded-lg transition-colors"
                         title="Eliminar usuario"
                       >
                         <Trash2 size={18} />

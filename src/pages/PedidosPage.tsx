@@ -11,32 +11,39 @@ import { pedidoService } from "../services/pedidos";
 import { Boton } from "../componentes/ui/Boton";
 import type { Pedido, EstadoPedido } from "../types/Pedido";
 
+// ✅ COLORES ACTUALIZADOS PARA MODO OSCURO (Tarjetas)
 const ESTADOS_POSIBLES: Record<
   EstadoPedido,
   { label: string; color: string; next?: EstadoPedido }
 > = {
   PENDIENTE: {
     label: "Pendiente",
-    color: "bg-yellow-100 text-yellow-800",
+    color: "bg-yellow-500/10 text-yellow-400 border border-yellow-500/30",
     next: "PAGADO",
   },
   PAGADO: {
     label: "Pagado",
-    color: "bg-blue-100 text-blue-800",
+    color: "bg-blue-500/10 text-blue-400 border border-blue-500/30",
     next: "EN_PREPARACION",
   },
   EN_PREPARACION: {
     label: "En Preparación",
-    color: "bg-purple-100 text-purple-800",
+    color: "bg-purple-500/10 text-purple-400 border border-purple-500/30",
     next: "EN_CAMINO",
   },
   EN_CAMINO: {
     label: "En Camino",
-    color: "bg-indigo-100 text-indigo-800",
+    color: "bg-indigo-500/10 text-indigo-400 border border-indigo-500/30",
     next: "ENTREGADO",
   },
-  ENTREGADO: { label: "Entregado", color: "bg-green-100 text-green-800" },
-  CANCELADO: { label: "Cancelado", color: "bg-red-100 text-red-800" },
+  ENTREGADO: {
+    label: "Entregado",
+    color: "bg-green-500/10 text-green-400 border border-green-500/30",
+  },
+  CANCELADO: {
+    label: "Cancelado",
+    color: "bg-red-500/10 text-red-400 border border-red-500/30",
+  },
 };
 
 export default function PedidosPage() {
@@ -82,59 +89,72 @@ export default function PedidosPage() {
 
   if (cargando) {
     return (
-      <div className="text-center py-12">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+      <div
+        className="flex h-[calc(100vh-8rem)] items-center justify-center"
+        style={{ backgroundColor: "#0F172A" }}
+      >
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#3B82F6] mx-auto mb-4"></div>
+          <p className="text-[#94A3B8]">Cargando pedidos...</p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="space-y-6">
+    <div
+      className="space-y-6 min-h-screen p-6"
+      style={{ backgroundColor: "#0F172A" }}
+    >
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
-          <Package className="text-blue-600" />
+        <h1 className="text-2xl font-bold text-[#F1F5F9] flex items-center gap-2">
+          <Package className="text-[#3B82F6]" />
           Cola de Órdenes y Pedidos
         </h1>
-        <Boton variante="secundario" onClick={cargarPedidos}>
+        <Boton
+          variante="secundario"
+          onClick={cargarPedidos}
+          className="bg-[#1E293B] hover:bg-[#334155] text-[#F1F5F9] border border-[#475569] font-semibold transition-all"
+        >
           🔄 Actualizar
         </Boton>
       </div>
 
-      <div className="bg-white rounded-lg border border-slate-200 shadow-sm overflow-hidden">
+      <div className="bg-[#1E293B] rounded-lg border border-[#334155] shadow-lg overflow-hidden">
         {pedidos.length === 0 ? (
-          <div className="text-center py-12 text-slate-500">
+          <div className="text-center py-12 text-[#94A3B8]">
             No hay pedidos registrados.
           </div>
         ) : (
-          <div className="divide-y divide-slate-200">
+          <div className="divide-y divide-[#334155]">
             {pedidos.map((pedido) => {
               const estadoInfo = ESTADOS_POSIBLES[pedido.estado];
               return (
                 <div
                   key={pedido.id}
-                  className="p-4 hover:bg-slate-50 transition-colors"
+                  className="p-4 hover:bg-[#0F172A] transition-colors"
                 >
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-2">
-                        <span className="font-bold text-slate-900">
+                        <span className="font-bold text-[#F1F5F9]">
                           Pedido #{pedido.id}
                         </span>
                         <span
-                          className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${estadoInfo.color}`}
+                          className={`px-2.5 py-0.5 rounded-full text-xs font-medium border ${estadoInfo.color}`}
                         >
                           {estadoInfo.label}
                         </span>
                       </div>
-                      <p className="text-sm text-slate-600">
+                      <p className="text-sm text-[#94A3B8]">
                         Cliente: {pedido.cliente?.nombre}{" "}
                         {pedido.cliente?.apellido} | Pago: {pedido.metodoPago} |
                         Total:{" "}
-                        <span className="font-bold text-slate-900">
-                          ${Number(pedido.total).toFixed(2)}
+                        <span className="font-bold text-[#3B82F6]">
+                          S/{Number(pedido.total).toFixed(2)}
                         </span>
                       </p>
-                      <p className="text-xs text-slate-500 mt-1">
+                      <p className="text-xs text-[#94A3B8] mt-1">
                         📍 {pedido.direccion?.calle} {pedido.direccion?.numero},{" "}
                         {pedido.direccion?.ciudad}
                         {pedido.direccion?.referencia &&
@@ -149,7 +169,7 @@ export default function PedidosPage() {
                           onClick={() =>
                             handleCambiarEstado(pedido.id, estadoInfo.next!)
                           }
-                          className="gap-2 text-sm"
+                          className="gap-2 text-sm bg-[#3B82F6] hover:bg-[#2563EB] text-white font-semibold shadow-lg shadow-blue-500/20 transition-all"
                         >
                           {estadoInfo.next === "PAGADO" ? (
                             <CheckCircle size={16} />
@@ -161,18 +181,17 @@ export default function PedidosPage() {
                       )}
                       {estadoInfo.next === "PAGADO" &&
                         procesando !== pedido.id && (
-                          <Boton
-                            variante="fantasma"
+                          <button
                             onClick={() =>
                               handleCambiarEstado(pedido.id, "CANCELADO")
                             }
-                            className="text-red-600 hover:bg-red-50 gap-2 text-sm"
+                            className="flex items-center gap-2 text-sm px-3 py-2 rounded-lg text-red-400 hover:bg-red-500/10 border border-transparent hover:border-red-500/30 transition-all font-medium"
                           >
                             <XCircle size={16} /> Cancelar
-                          </Boton>
+                          </button>
                         )}
                       {procesando === pedido.id && (
-                        <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
+                        <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-[#3B82F6]"></div>
                       )}
                       <button
                         onClick={() =>
@@ -180,7 +199,7 @@ export default function PedidosPage() {
                             expandido === pedido.id ? null : pedido.id,
                           )
                         }
-                        className="p-2 hover:bg-slate-200 rounded-lg"
+                        className="p-2 hover:bg-[#334155] rounded-lg text-[#94A3B8] transition-colors"
                       >
                         {expandido === pedido.id ? (
                           <ChevronUp size={20} />
@@ -192,19 +211,19 @@ export default function PedidosPage() {
                   </div>
 
                   {expandido === pedido.id && (
-                    <div className="mt-4 pt-4 border-t border-slate-200 pl-4">
-                      <h4 className="font-semibold text-sm text-slate-900 mb-2">
+                    <div className="mt-4 pt-4 border-t border-[#334155] pl-4">
+                      <h4 className="font-semibold text-sm text-[#F1F5F9] mb-2">
                         Productos:
                       </h4>
                       {pedido.detalles.map((det) => (
                         <div
                           key={det.id}
-                          className="flex justify-between text-sm py-1"
+                          className="flex justify-between text-sm py-1 text-[#94A3B8]"
                         >
                           <span>
                             {det.cantidad}x {det.producto.nombre}
                           </span>
-                          <span className="font-mono">
+                          <span className="font-mono text-[#F1F5F9]">
                             ${Number(det.subtotal).toFixed(2)}
                           </span>
                         </div>

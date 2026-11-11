@@ -28,10 +28,10 @@ const CerrarCajaPage = lazy(() => import("./pages/CerrarCajaPage"));
 
 // Componente de carga (Fallback) para el Suspense
 const LoadingFallback = () => (
-  <div className="flex h-screen items-center justify-center bg-slate-50">
+  <div className="flex h-screen items-center justify-center bg-[#0F172A]">
     <div className="text-center">
-      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-      <p className="mt-4 text-slate-600">Cargando módulo...</p>
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#3B82F6] mx-auto"></div>
+      <p className="mt-4 text-[#94A3B8]">Cargando módulo...</p>
     </div>
   </div>
 );
@@ -46,10 +46,10 @@ function App() {
 
   if (verificandoSesion) {
     return (
-      <div className="flex h-screen items-center justify-center bg-slate-50">
+      <div className="flex h-screen items-center justify-center bg-[#0F172A]">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-slate-600">Verificando sesión...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#3B82F6] mx-auto"></div>
+          <p className="mt-4 text-[#94A3B8]">Verificando sesión...</p>
         </div>
       </div>
     );

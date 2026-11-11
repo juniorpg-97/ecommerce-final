@@ -32,21 +32,24 @@ export default function RegistroPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
+    <div
+      className="min-h-screen flex items-center justify-center p-4"
+      style={{ backgroundColor: "#0F172A" }}
+    >
       <div className="w-full max-w-md">
         {/* Logo y título */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-blue-600 text-white mb-4">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-[#3B82F6] text-white mb-4 shadow-lg shadow-blue-500/20">
             <UserPlus size={32} />
           </div>
-          <h1 className="text-3xl font-bold text-slate-900">
-            Voltix<span className="text-blue-600">.OS</span>
+          <h1 className="text-3xl font-bold text-[#F1F5F9]">
+            Voltix<span className="text-[#3B82F6]">.OS</span>
           </h1>
-          <p className="text-slate-600 mt-2">Crea tu cuenta de cliente</p>
+          <p className="text-[#94A3B8] mt-2">Crea tu cuenta de cliente</p>
         </div>
 
         {/* Formulario */}
-        <div className="bg-white rounded-xl shadow-lg border border-slate-200 p-8">
+        <div className="bg-[#1E293B] rounded-xl shadow-xl border border-[#334155] p-8">
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
             <div className="grid grid-cols-2 gap-4">
               <CampoTexto
@@ -94,15 +97,21 @@ export default function RegistroPage() {
               <input
                 type="checkbox"
                 required
-                className="w-4 h-4 mt-0.5 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+                className="w-4 h-4 mt-0.5 rounded border-[#475569] bg-[#0F172A] text-[#3B82F6] focus:ring-[#3B82F6] focus:ring-offset-0"
               />
-              <span className="text-sm text-slate-600">
+              <span className="text-sm text-[#94A3B8]">
                 Acepto los{" "}
-                <a href="#" className="text-blue-600 hover:underline">
+                <a
+                  href="#"
+                  className="text-[#3B82F6] hover:text-[#2563EB] transition-colors"
+                >
                   Términos del Servicio
                 </a>{" "}
                 y la{" "}
-                <a href="#" className="text-blue-600 hover:underline">
+                <a
+                  href="#"
+                  className="text-[#3B82F6] hover:text-[#2563EB] transition-colors"
+                >
                   Política de Privacidad
                 </a>
               </span>
@@ -114,7 +123,7 @@ export default function RegistroPage() {
               variante="primario"
               anchoCompleto
               disabled={isSubmitting}
-              className="h-12 text-base"
+              className="h-12 text-base bg-[#3B82F6] hover:bg-[#2563EB] text-white font-semibold shadow-lg shadow-blue-500/20 transition-all"
             >
               {isSubmitting ? (
                 <span className="flex items-center gap-2">
@@ -146,12 +155,12 @@ export default function RegistroPage() {
           </form>
 
           {/* Enlace a login */}
-          <div className="mt-6 text-center text-sm text-slate-600">
+          <div className="mt-6 text-center text-sm text-[#94A3B8]">
             <p>
               ¿Ya tienes una cuenta?{" "}
               <Link
                 to="/login"
-                className="text-blue-600 hover:text-blue-700 font-semibold hover:underline"
+                className="text-[#3B82F6] hover:text-[#2563EB] font-semibold hover:underline transition-colors"
               >
                 Inicia sesión
               </Link>
@@ -160,7 +169,7 @@ export default function RegistroPage() {
         </div>
 
         {/* Footer */}
-        <p className="text-center text-xs text-slate-500 mt-6">
+        <p className="text-center text-xs text-[#64748B] mt-6">
           © 2024 Voltix.OS - Sistema de Punto de Venta y E-commerce
         </p>
       </div>

@@ -75,24 +75,22 @@ export default function LayoutStaff() {
   const esActivo = (path: string) => location.pathname === path;
 
   return (
-    <div className="min-h-screen flex" style={{ backgroundColor: "#0e1321" }}>
+    // 🔥 CAMBIO CRÍTICO: backgroundColor "#0F172A" en lugar de "#F8FAFC"
+    <div className="min-h-screen flex" style={{ backgroundColor: "#0F172A" }}>
       {/* Sidebar Desktop */}
       <aside
         className="hidden lg:flex lg:flex-col lg:w-64 fixed h-full border-r z-50"
-        style={{
-          backgroundColor: "#090e1c",
-          borderColor: "rgba(48, 52, 68, 0.4)",
-        }}
+        style={{ backgroundColor: "#0F172A", borderColor: "#334155" }}
       >
         {/* Logo */}
         <div
           className="p-4 flex items-center justify-between border-b"
-          style={{ borderColor: "rgba(48, 52, 68, 0.4)" }}
+          style={{ borderColor: "#334155" }}
         >
           <Link to="/dashboard" className="flex items-center gap-2">
             <div
               className="h-7 w-auto flex items-center justify-center"
-              style={{ color: "#adc6ff" }}
+              style={{ color: "#3B82F6" }}
             >
               <ShoppingCart size={24} />
             </div>
@@ -100,7 +98,7 @@ export default function LayoutStaff() {
               <span
                 className="block text-lg font-bold tracking-tight"
                 style={{
-                  color: "#dee2f6",
+                  color: "#F1F5F9",
                   fontFamily: "'Plus Jakarta Sans', sans-serif",
                 }}
               >
@@ -108,7 +106,7 @@ export default function LayoutStaff() {
               </span>
               <span
                 className="block text-[10px] uppercase tracking-widest font-semibold"
-                style={{ color: "#4d8eff" }}
+                style={{ color: "#3B82F6" }}
               >
                 CORE POS
               </span>
@@ -117,33 +115,30 @@ export default function LayoutStaff() {
         </div>
 
         {/* Perfil de Usuario */}
-        <div
-          className="p-3 border-b"
-          style={{ borderColor: "rgba(48, 52, 68, 0.4)" }}
-        >
+        <div className="p-3 border-b" style={{ borderColor: "#334155" }}>
           <div
             className="flex items-center gap-2 p-2 rounded-lg"
-            style={{ backgroundColor: "rgba(22, 27, 42, 0.6)" }}
+            style={{ backgroundColor: "#1E293B" }}
           >
             <div
               className="w-9 h-9 rounded-full flex items-center justify-center"
               style={{
-                backgroundColor: "#1a1f2e",
-                border: "1px solid rgba(173, 198, 255, 0.4)",
+                backgroundColor: "#0F172A",
+                border: "1px solid #334155",
               }}
             >
-              <User size={18} style={{ color: "#8c909f" }} />
+              <User size={18} style={{ color: "#94A3B8" }} />
             </div>
             <div className="flex-1 min-w-0">
               <p
                 className="text-sm font-semibold truncate"
-                style={{ color: "#dee2f6" }}
+                style={{ color: "#F1F5F9" }}
               >
                 {usuarioNombre}
               </p>
               <p
                 className="text-xs uppercase font-bold truncate"
-                style={{ color: "#4d8eff" }}
+                style={{ color: "#3B82F6" }}
               >
                 {usuarioRol}
               </p>
@@ -153,11 +148,10 @@ export default function LayoutStaff() {
 
         {/* Navegación */}
         <nav className="flex-1 p-2 space-y-1 overflow-y-auto">
-          {/* Sección Operaciones */}
           <div className="px-2 mb-1.5">
             <p
               className="text-[10px] uppercase tracking-wider font-semibold"
-              style={{ color: "#8c909f" }}
+              style={{ color: "#64748B" }}
             >
               Operaciones
             </p>
@@ -174,13 +168,8 @@ export default function LayoutStaff() {
                 to={enlace.path || "#"}
                 className="flex items-center gap-2 px-2 py-2 rounded-lg transition-all text-sm font-medium"
                 style={{
-                  backgroundColor: isActive
-                    ? "rgba(77, 142, 255, 0.25)"
-                    : "transparent",
-                  color: isActive ? "#dee2f6" : "#c2c6d6",
-                  boxShadow: isActive
-                    ? "0 0 16px rgba(77, 142, 255, 0.25)"
-                    : "none",
+                  backgroundColor: isActive ? "#1E293B" : "transparent",
+                  color: isActive ? "#3B82F6" : "#94A3B8",
                 }}
               >
                 <Icono size={18} />
@@ -189,11 +178,10 @@ export default function LayoutStaff() {
             );
           })}
 
-          {/* Sección Storefront */}
           <div className="px-2 mb-1.5 mt-4">
             <p
               className="text-[10px] uppercase tracking-wider font-semibold"
-              style={{ color: "#8c909f" }}
+              style={{ color: "#64748B" }}
             >
               Storefront Retail
             </p>
@@ -206,7 +194,7 @@ export default function LayoutStaff() {
                 <div key={index} className="space-y-1 mt-2">
                   <div
                     className="flex items-center gap-2 px-2 py-2 text-[10px] uppercase tracking-wider font-semibold"
-                    style={{ color: "#8c909f" }}
+                    style={{ color: "#64748B" }}
                   >
                     <Icono size={16} />
                     <span>{enlace.label}</span>
@@ -218,9 +206,9 @@ export default function LayoutStaff() {
                       className="flex items-center gap-2 px-2 py-2 pl-6 rounded-lg transition-all text-sm font-medium"
                       style={{
                         backgroundColor: esActivo(child.path)
-                          ? "rgba(77, 142, 255, 0.25)"
+                          ? "#1E293B"
                           : "transparent",
-                        color: esActivo(child.path) ? "#dee2f6" : "#c2c6d6",
+                        color: esActivo(child.path) ? "#3B82F6" : "#94A3B8",
                       }}
                     >
                       <span>{child.label}</span>
@@ -240,12 +228,9 @@ export default function LayoutStaff() {
                 className="flex items-center gap-2 px-2 py-2 rounded-lg transition-all text-sm font-medium"
                 style={{
                   backgroundColor: esActivo(enlace.path)
-                    ? "rgba(77, 142, 255, 0.25)"
+                    ? "#1E293B"
                     : "transparent",
-                  color: esActivo(enlace.path) ? "#dee2f6" : "#c2c6d6",
-                  boxShadow: esActivo(enlace.path)
-                    ? "0 0 16px rgba(77, 142, 255, 0.25)"
-                    : "none",
+                  color: esActivo(enlace.path) ? "#3B82F6" : "#94A3B8",
                 }}
               >
                 <Icono size={18} />
@@ -256,28 +241,22 @@ export default function LayoutStaff() {
         </nav>
 
         {/* Estado de Caja */}
-        <div
-          className="p-3 border-t"
-          style={{ borderColor: "rgba(48, 52, 68, 0.4)" }}
-        >
+        <div className="p-3 border-t" style={{ borderColor: "#334155" }}>
           <div
             className="flex items-center justify-between p-2 rounded-lg mb-2"
-            style={{
-              backgroundColor: "rgba(22, 27, 42, 0.6)",
-              border: "1px solid rgba(48, 52, 68, 0.4)",
-            }}
+            style={{ backgroundColor: "#1E293B", border: "1px solid #334155" }}
           >
             <div className="flex items-center gap-2">
               <span
                 className="inline-block w-2.5 h-2.5 rounded-full animate-pulse"
                 style={{
-                  backgroundColor: "#adc6ff",
-                  boxShadow: "0 0 8px rgba(173, 198, 255, 0.7)",
+                  backgroundColor: "#10B981",
+                  boxShadow: "0 0 8px rgba(16, 185, 129, 0.5)",
                 }}
               ></span>
               <span
                 className="text-xs font-semibold"
-                style={{ color: "#dee2f6" }}
+                style={{ color: "#F1F5F9" }}
               >
                 Caja #01: ABIERTA
               </span>
@@ -288,9 +267,9 @@ export default function LayoutStaff() {
             onClick={handleLogout}
             className="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-lg transition-all text-sm font-medium"
             style={{
-              backgroundColor: "rgba(236, 106, 6, 0.1)",
-              color: "#ec6a06",
-              border: "1px solid rgba(236, 106, 6, 0.3)",
+              backgroundColor: "rgba(239, 68, 68, 0.1)",
+              color: "#EF4444",
+              border: "1px solid rgba(239, 68, 68, 0.3)",
             }}
           >
             <LogOut size={16} />
@@ -299,39 +278,42 @@ export default function LayoutStaff() {
         </div>
       </aside>
 
-      {/* Contenido Principal */}
-      <div className="flex-1 lg:ml-64 flex flex-col min-h-screen">
+      {/* Contenido Principal - 🔥 TAMBIÉN AGREGAR FONDO OSCURO */}
+      <div
+        className="flex-1 lg:ml-64 flex flex-col min-h-screen"
+        style={{ backgroundColor: "#0F172A" }}
+      >
         {/* Header Móvil */}
         <header
           className="lg:hidden h-14 border-b flex items-center justify-between px-4 sticky top-0 z-40 backdrop-blur-xl"
-          style={{
-            backgroundColor: "rgba(22, 27, 42, 0.9)",
-            borderColor: "rgba(48, 52, 68, 0.4)",
-          }}
+          style={{ backgroundColor: "#0F172A", borderColor: "#334155" }}
         >
           <button
             onClick={() => setMenuAbierto(true)}
-            style={{ color: "#c2c6d6" }}
+            style={{ color: "#94A3B8" }}
           >
             <Menu size={22} />
           </button>
           <div className="flex items-center gap-2">
-            <ShoppingCart size={20} style={{ color: "#4d8eff" }} />
+            <ShoppingCart size={20} style={{ color: "#3B82F6" }} />
             <span
               className="text-base font-bold"
               style={{
-                color: "#dee2f6",
+                color: "#F1F5F9",
                 fontFamily: "'Plus Jakarta Sans', sans-serif",
               }}
             >
-              Voltix<span style={{ color: "#4d8eff" }}>.OS</span>
+              Voltix<span style={{ color: "#3B82F6" }}>.OS</span>
             </span>
           </div>
           <div className="w-6"></div>
         </header>
 
-        {/* Main Content */}
-        <main className="flex-1 p-4 lg:p-6">
+        {/* Main Content - 🔥 AGREGAR FONDO OSCURO AQUÍ TAMBIÉN */}
+        <main
+          className="flex-1 p-4 lg:p-6"
+          style={{ backgroundColor: "#0F172A" }}
+        >
           <Outlet />
         </main>
       </div>
@@ -346,23 +328,23 @@ export default function LayoutStaff() {
           <aside
             className="relative w-64 h-full flex flex-col"
             style={{
-              backgroundColor: "#090e1c",
-              borderRight: "1px solid rgba(48, 52, 68, 0.4)",
+              backgroundColor: "#0F172A",
+              borderRight: "1px solid #334155",
             }}
           >
             <div
               className="p-4 border-b flex items-center justify-between"
-              style={{ borderColor: "rgba(48, 52, 68, 0.4)" }}
+              style={{ borderColor: "#334155" }}
             >
               <span
                 className="text-base font-bold"
-                style={{ color: "#dee2f6" }}
+                style={{ color: "#F1F5F9" }}
               >
                 Menú
               </span>
               <button
                 onClick={() => setMenuAbierto(false)}
-                style={{ color: "#8c909f" }}
+                style={{ color: "#94A3B8" }}
               >
                 <X size={22} />
               </button>
@@ -375,7 +357,7 @@ export default function LayoutStaff() {
                     <div key={index} className="space-y-1 mt-2">
                       <div
                         className="flex items-center gap-2 px-2 py-2 text-[10px] uppercase tracking-wider font-semibold"
-                        style={{ color: "#8c909f" }}
+                        style={{ color: "#64748B" }}
                       >
                         <Icono size={16} />
                         <span>{enlace.label}</span>
@@ -388,9 +370,9 @@ export default function LayoutStaff() {
                           className="flex items-center gap-2 px-2 py-2 pl-6 rounded-lg transition-all text-sm font-medium"
                           style={{
                             backgroundColor: esActivo(child.path)
-                              ? "rgba(77, 142, 255, 0.25)"
+                              ? "#1E293B"
                               : "transparent",
-                            color: esActivo(child.path) ? "#dee2f6" : "#c2c6d6",
+                            color: esActivo(child.path) ? "#3B82F6" : "#94A3B8",
                           }}
                         >
                           <span>{child.label}</span>
@@ -411,9 +393,9 @@ export default function LayoutStaff() {
                     className="flex items-center gap-2 px-2 py-2 rounded-lg transition-all text-sm font-medium"
                     style={{
                       backgroundColor: esActivo(enlace.path)
-                        ? "rgba(77, 142, 255, 0.25)"
+                        ? "#1E293B"
                         : "transparent",
-                      color: esActivo(enlace.path) ? "#dee2f6" : "#c2c6d6",
+                      color: esActivo(enlace.path) ? "#3B82F6" : "#94A3B8",
                     }}
                   >
                     <Icono size={18} />
@@ -422,10 +404,7 @@ export default function LayoutStaff() {
                 );
               })}
             </nav>
-            <div
-              className="p-3 border-t"
-              style={{ borderColor: "rgba(48, 52, 68, 0.4)" }}
-            >
+            <div className="p-3 border-t" style={{ borderColor: "#334155" }}>
               <button
                 onClick={() => {
                   handleLogout();
@@ -433,9 +412,9 @@ export default function LayoutStaff() {
                 }}
                 className="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-lg transition-all text-sm font-medium"
                 style={{
-                  backgroundColor: "rgba(236, 106, 6, 0.1)",
-                  color: "#ec6a06",
-                  border: "1px solid rgba(236, 106, 6, 0.3)",
+                  backgroundColor: "rgba(239, 68, 68, 0.1)",
+                  color: "#EF4444",
+                  border: "1px solid rgba(239, 68, 68, 0.3)",
                 }}
               >
                 <LogOut size={16} />
