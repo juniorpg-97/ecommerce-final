@@ -6,8 +6,6 @@ export const api = axios.create({
   withCredentials: true,
 });
 
-// ... el resto de tus interceptores se quedan igual ...
-
 api.interceptors.request.use((config: any) => {
   const token = localStorage.getItem("token");
   if (token) {
