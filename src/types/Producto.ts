@@ -11,6 +11,7 @@ export interface Producto {
   nombre: string;
   descripcion?: string | null;
   costoAdquisicion: number;
+  imagen?: string | null; // ✅ Campo de imagen que viene del backend
   precioVenta: number;
   activo: boolean;
   imagenUrl?: string | null; // ✅ Único campo adicional para el frontend

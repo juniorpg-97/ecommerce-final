@@ -1,1 +1,32 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap");
+
+/* Tailwind CSS v4 - Nueva sintaxis */
 @import "tailwindcss";
+
+@layer base {
+  html {
+    @apply bg-surface text-on-surface font-body antialiased;
+  }
+
+  /* Scrollbar oscuro sutil */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-surface-container-lowest;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-surface-variant rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-outline;
+  }
+}
+
+@layer utilities {
+  /* Utilidades personalizadas si las necesitas */
+}

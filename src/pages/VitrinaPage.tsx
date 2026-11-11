@@ -12,6 +12,7 @@ import {
   AlertCircle,
   Check,
 } from "lucide-react";
+import { CardProducto } from "../componentes/CardProducto"; // ✅ IMPORTAR COMPONENTE
 
 export default function VitrinaPage() {
   const navigate = useNavigate();
@@ -36,6 +37,7 @@ export default function VitrinaPage() {
       setCategorias(cats);
 
       const prods = await productoService.getPublicos();
+      console.log(" Productos recibidos:", prods); // Debug
       setProductos(prods);
     } catch (err: unknown) {
       setError("Error al cargar el catálogo. Intenta más tarde.");
@@ -45,10 +47,8 @@ export default function VitrinaPage() {
   };
 
   useEffect(() => {
-    // 1. Cargar datos al montar el componente
     cargarDatos();
 
-    // 2. ✅ NUEVO: Refrescar datos automáticamente cuando el usuario vuelve a esta pestaña
     const handleVisibilityChange = () => {
       if (document.visibilityState === "visible") {
         cargarDatos();
@@ -57,7 +57,6 @@ export default function VitrinaPage() {
 
     document.addEventListener("visibilitychange", handleVisibilityChange);
 
-    // 3. Limpiar el listener al desmontar
     return () => {
       document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
@@ -73,7 +72,6 @@ export default function VitrinaPage() {
       stockDisponible: stockReal,
     });
 
-    // Feedback visual temporal
     setProductoAgregado(producto.id);
     setTimeout(() => setProductoAgregado(null), 1500);
   };
@@ -92,7 +90,7 @@ export default function VitrinaPage() {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      {/* Hero Section con indicador de carrito */}
+      {/* Hero Section */}
       <div className="bg-gradient-to-br from-blue-600 to-blue-800 text-white py-12 px-4 relative">
         <div className="max-w-7xl mx-auto flex justify-between items-start">
           <div>
@@ -102,7 +100,6 @@ export default function VitrinaPage() {
             </p>
           </div>
 
-          {/* Botón flotante del carrito */}
           <button
             onClick={() => navigate("/checkout")}
             className="relative bg-white text-blue-700 px-4 py-2 rounded-lg font-semibold shadow-lg hover:bg-blue-50 transition-colors flex items-center gap-2"
@@ -189,97 +186,15 @@ export default function VitrinaPage() {
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {productosFiltrados.map((producto) => {
-                  const stockReal = producto.inventario?.stock ?? 0;
-                  const esAgotado = stockReal === 0;
-                  const fueAgregado = productoAgregado === producto.id;
-
-                  return (
-                    <div
-                      key={producto.id}
-                      className={`bg-white rounded-lg border border-slate-200 shadow-sm hover:shadow-md transition-all overflow-hidden flex flex-col ${
-                        esAgotado ? "opacity-75" : ""
-                      }`}
-                    >
-                      <div className="aspect-square bg-slate-100 flex items-center justify-center relative">
-                        <Package size={48} className="text-slate-400" />
-                        {esAgotado && (
-                          <span className="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">
-                            AGOTADO
-                          </span>
-                        )}
-                      </div>
-
-                      <div className="p-4 flex-1 flex flex-col">
-                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-700 w-fit mb-2">
-                          {producto.categoria.nombre}
-                        </span>
-
-                        <h3 className="font-semibold text-slate-900 mb-1 line-clamp-2">
-                          {producto.nombre}
-                        </h3>
-
-                        {producto.descripcion && (
-                          <p className="text-sm text-slate-600 mb-3 line-clamp-2 flex-1">
-                            {producto.descripcion}
-                          </p>
-                        )}
-
-                        <div className="mt-auto">
-                          <p className="text-2xl font-bold text-blue-600 mb-3">
-                            $
-                            {Number(producto.precioVenta).toLocaleString(
-                              "es-MX",
-                              {
-                                minimumFractionDigits: 2,
-                              },
-                            )}
-                          </p>
-                          <p className="text-xs text-slate-500 mb-3">
-                            Stock disponible:{" "}
-                            <span
-                              className={
-                                esAgotado
-                                  ? "text-red-600 font-bold"
-                                  : "text-green-600"
-                              }
-                            >
-                              {stockReal}
-                            </span>
-                          </p>
-
-                          <button
-                            disabled={esAgotado}
-                            onClick={() => handleAgregarAlCarrito(producto)}
-                            className={`w-full font-medium py-2 px-4 rounded-lg transition-colors flex items-center justify-center gap-2 ${
-                              fueAgregado
-                                ? "bg-green-600 text-white"
-                                : esAgotado
-                                  ? "bg-slate-200 text-slate-500 cursor-not-allowed"
-                                  : "bg-blue-600 hover:bg-blue-700 text-white"
-                            }`}
-                          >
-                            {fueAgregado ? (
-                              <>
-                                <Check size={18} />
-                                <span>¡Agregado!</span>
-                              </>
-                            ) : (
-                              <>
-                                <ShoppingCart size={18} />
-                                <span>
-                                  {esAgotado
-                                    ? "Sin stock"
-                                    : "Agregar al carrito"}
-                                </span>
-                              </>
-                            )}
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
+                {/* ✅ USAR COMPONENTE CardProducto */}
+                {productosFiltrados.map((producto) => (
+                  <CardProducto
+                    key={producto.id}
+                    producto={producto}
+                    fueAgregado={productoAgregado === producto.id}
+                    onAgregar={handleAgregarAlCarrito}
+                  />
+                ))}
               </div>
             )}
           </>
