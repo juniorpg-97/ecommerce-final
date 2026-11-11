@@ -14,10 +14,10 @@ import {
 } from "lucide-react";
 import { productoService } from "../services/productos";
 import { ventaService } from "../services/ventas";
-import { cajaService } from "../services/caja"; // ✅ NUEVO: Importar servicio de cajas
 import { useCarritoStore } from "../store/carritoStore";
 import { Boton } from "../componentes/ui/Boton";
 import type { ProductoConDetalles } from "../types/Producto";
+import { useCaja } from "../hooks/useCaja";
 
 const ventaSchema = z.object({
   metodoPago: z.enum([
@@ -57,10 +57,6 @@ export default function POSPage() {
   const [ventaExitosa, setVentaExitosa] = useState<any>(null);
   const [errorVenta, setErrorVenta] = useState<string | null>(null);
 
-  // ✅ NUEVO: Estados para manejar la caja activa dinámicamente
-  const [cajaActiva, setCajaActiva] = useState<any>(null);
-  const [cargandoCaja, setCargandoCaja] = useState(true);
-
   const { register, handleSubmit, watch } = useForm<VentaFormData>({
     resolver: zodResolver(ventaSchema),
     defaultValues: { metodoPago: "EFECTIVO", observaciones: "" },
@@ -69,24 +65,7 @@ export default function POSPage() {
   const metodoPago = watch("metodoPago");
   const montoRecibido = watch("montoRecibido");
   const total = calcularTotal();
-
-  // ✅ NUEVO: Obtener la caja activa al montar el componente
-  useEffect(() => {
-    const obtenerCaja = async () => {
-      try {
-        const caja = await cajaService.getActiva();
-        setCajaActiva(caja);
-      } catch (err: any) {
-        setErrorVenta(
-          err.response?.data?.message ||
-            "No se pudo obtener la caja activa. ¿Abriste caja hoy?",
-        );
-      } finally {
-        setCargandoCaja(false);
-      }
-    };
-    obtenerCaja();
-  }, []);
+  const { cajaActiva, cargando: cargandoCaja, error: errorCaja } = useCaja();
 
   // Buscar productos
   useEffect(() => {
@@ -112,7 +91,6 @@ export default function POSPage() {
   const onSubmit = async (datos: VentaFormData) => {
     if (items.length === 0) return;
 
-    // ✅ NUEVO: Validar que exista una caja activa antes de vender
     if (!cajaActiva) {
       setErrorVenta("No hay una caja activa. No se puede procesar la venta.");
       return;
@@ -133,7 +111,7 @@ export default function POSPage() {
       }));
 
       const respuesta = await ventaService.create({
-        cajaId: cajaActiva.id, // ✅ DINÁMICO: Usa el ID real de la caja obtenida del backend
+        cajaId: cajaActiva.id,
         tipo: "POS",
         metodoPago: datos.metodoPago,
         observaciones: datos.observaciones,
@@ -162,7 +140,6 @@ export default function POSPage() {
     setErrorVenta(null);
   };
 
-  // ✅ NUEVO: Pantalla de carga mientras verifica la caja
   if (cargandoCaja) {
     return (
       <div className="flex h-[calc(100vh-8rem)] items-center justify-center">
@@ -184,7 +161,7 @@ export default function POSPage() {
             Caja Cerrada o No Encontrada
           </h2>
           <p className="text-red-600 mb-4">
-            {errorVenta ||
+            {errorCaja ||
               "Debes abrir una caja antes de poder realizar ventas."}
           </p>
           <Boton variante="primario" onClick={() => window.location.reload()}>
@@ -453,7 +430,7 @@ export default function POSPage() {
 
           {errorVenta && (
             <div className="flex items-start gap-2 p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm">
-              <AlertTriangle size={16} className="mt-0.5 flex-shrink-0" />
+              <AlertTriangle size={16} className="mt-0.5 shrink-0" />
               <span>{errorVenta}</span>
             </div>
           )}
