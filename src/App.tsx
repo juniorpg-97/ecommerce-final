@@ -1,7 +1,8 @@
 import { useEffect } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useAuthStore } from "./store/authStore";
-
+import AbrirCajaPage from "./pages/AbrirCajaPage";
+import CerrarCajaPage from "./pages/CerrarCajaPage";
 // Layouts y Protección
 import LayoutCliente from "./componentes/LayoutCliente";
 import LayoutStaff from "./componentes/LayoutStaff";
@@ -96,6 +97,8 @@ function App() {
               element={<RutaProtegida rolesPermitidos={["ADMINISTRADOR"]} />}
             >
               <Route path="/cajeros" element={<CajerosPage />} />
+              <Route path="/cajas/abrir" element={<AbrirCajaPage />} />
+              <Route path="/cajas/cerrar" element={<CerrarCajaPage />} />
             </Route>
           </Route>
         </Route>
