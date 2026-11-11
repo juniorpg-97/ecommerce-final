@@ -1,14 +1,12 @@
 import axios from "axios";
 
-const API_URL =
-  import.meta.env.VITE_API_URL || "https://e-commerce-c5ta.onrender.com";
-
 export const api = axios.create({
-  baseURL: API_URL,
-  headers: {
-    "Content-Type": "application/json",
-  },
+  // ✅ USA LA VARIABLE DE ENTORNO, con fallback a localhost para desarrollo
+  baseURL: import.meta.env.VITE_API_URL || "http://localhost:3000",
+  withCredentials: true,
 });
+
+// ... el resto de tus interceptores se quedan igual ...
 
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
@@ -17,3 +15,5 @@ api.interceptors.request.use((config) => {
   }
   return config;
 });
+
+export default api;

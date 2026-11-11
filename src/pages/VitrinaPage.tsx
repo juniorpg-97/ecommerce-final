@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { productoService } from "../services/productos";
 import { categoriaService } from "../services/categorias";
@@ -78,15 +78,17 @@ export default function VitrinaPage() {
     setTimeout(() => setProductoAgregado(null), 1500);
   };
 
-  const productosFiltrados = productos.filter((producto) => {
-    const coincideCategoria =
-      categoriaFiltro === "todas" ||
-      producto.categoria.nombre === categoriaFiltro;
-    const coincideBusqueda =
-      producto.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
-      producto.descripcion?.toLowerCase().includes(busqueda.toLowerCase());
-    return coincideCategoria && coincideBusqueda;
-  });
+  const productosFiltrados = useMemo(() => {
+    return productos.filter((producto) => {
+      const coincideCategoria =
+        categoriaFiltro === "todas" ||
+        producto.categoria.nombre === categoriaFiltro;
+      const coincideBusqueda =
+        producto.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
+        producto.descripcion?.toLowerCase().includes(busqueda.toLowerCase());
+      return coincideCategoria && coincideBusqueda;
+    });
+  }, [productos, categoriaFiltro, busqueda]);
 
   return (
     <div className="min-h-screen bg-slate-50">

@@ -1,33 +1,40 @@
-import { useEffect } from "react";
+import { useEffect, lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useAuthStore } from "./store/authStore";
-import AbrirCajaPage from "./pages/AbrirCajaPage";
-import CerrarCajaPage from "./pages/CerrarCajaPage";
+
 // Layouts y Protección
 import LayoutCliente from "./componentes/LayoutCliente";
 import LayoutStaff from "./componentes/LayoutStaff";
 import { RutaProtegida } from "./componentes/RutaProtegida";
 
-// Páginas de Autenticación
+// Páginas de carga inmediata (Eager loading)
 import LoginPage from "./pages/LoginPage";
 import RegistroPage from "./pages/RegistroPage";
-
-// Páginas de Cliente
 import VitrinaPage from "./pages/VitrinaPage";
 import CheckoutPage from "./pages/CheckoutPage";
-import MisPedidosPage from "./pages/MisPedidosPage"; // <-- IMPORTADO
-
-// Páginas de Staff
+import MisPedidosPage from "./pages/MisPedidosPage";
 import DashboardPage from "./pages/DashboardPage";
 import ProductosPage from "./pages/ProductosPage";
-import CajerosPage from "./pages/CajerosPage";
 import NuevoProductoPage from "./pages/NuevoProductoPage";
 import POSPage from "./pages/POSPage";
 import HistorialVentasPage from "./pages/HistorialVentasPage";
 import PedidosPage from "./pages/PedidosPage";
-
-// Páginas Generales
 import SinAccesoPage from "./pages/SinAcceso";
+
+// ✂️ PÁGINAS CON CODE SPLITTING (Lazy loading)
+const CajerosPage = lazy(() => import("./pages/CajerosPage"));
+const AbrirCajaPage = lazy(() => import("./pages/AbrirCajaPage"));
+const CerrarCajaPage = lazy(() => import("./pages/CerrarCajaPage"));
+
+// Componente de carga (Fallback) para el Suspense
+const LoadingFallback = () => (
+  <div className="flex h-screen items-center justify-center bg-slate-50">
+    <div className="text-center">
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+      <p className="mt-4 text-slate-600">Cargando módulo...</p>
+    </div>
+  </div>
+);
 
 function App() {
   const verificarSesion = useAuthStore((s) => s.verificarSesion);
@@ -71,8 +78,7 @@ function App() {
         <Route element={<RutaProtegida rolesPermitidos={["CLIENTE"]} />}>
           <Route element={<LayoutCliente />}>
             <Route path="/checkout" element={<CheckoutPage />} />
-            <Route path="/mis-pedidos" element={<MisPedidosPage />} />{" "}
-            {/* <-- RUTA AGREGADA */}
+            <Route path="/mis-pedidos" element={<MisPedidosPage />} />
           </Route>
         </Route>
 
@@ -92,13 +98,34 @@ function App() {
             <Route path="/historial-ventas" element={<HistorialVentasPage />} />
             <Route path="/pedidos" element={<PedidosPage />} />
 
-            {/* Rutas SOLO para Administrador (anidadas) */}
+            {/* Rutas SOLO para Administrador (anidadas) con Code Splitting */}
             <Route
               element={<RutaProtegida rolesPermitidos={["ADMINISTRADOR"]} />}
             >
-              <Route path="/cajeros" element={<CajerosPage />} />
-              <Route path="/cajas/abrir" element={<AbrirCajaPage />} />
-              <Route path="/cajas/cerrar" element={<CerrarCajaPage />} />
+              <Route
+                path="/cajeros"
+                element={
+                  <Suspense fallback={<LoadingFallback />}>
+                    <CajerosPage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="/cajas/abrir"
+                element={
+                  <Suspense fallback={<LoadingFallback />}>
+                    <AbrirCajaPage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="/cajas/cerrar"
+                element={
+                  <Suspense fallback={<LoadingFallback />}>
+                    <CerrarCajaPage />
+                  </Suspense>
+                }
+              />
             </Route>
           </Route>
         </Route>
