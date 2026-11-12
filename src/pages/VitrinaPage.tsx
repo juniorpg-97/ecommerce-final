@@ -1,19 +1,16 @@
 import { useEffect, useState, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
 import { productoService } from "../services/productos";
 import { categoriaService } from "../services/categorias";
 import { useCarritoClienteStore } from "../store/carritoClienteStore";
 import type { ProductoConDetalles } from "../types/Producto";
 import type { Categoria } from "../types/Categoria";
-import { ShoppingCart, Package, Search, AlertCircle } from "lucide-react";
+import { Package, Search, AlertCircle } from "lucide-react";
 import { CardProducto } from "../componentes/CardProducto";
 
 export default function VitrinaPage() {
-  const navigate = useNavigate();
   const agregarProducto = useCarritoClienteStore(
     (state) => state.agregarProducto,
   );
-  const contarItems = useCarritoClienteStore((state) => state.contarItems);
 
   const [productos, setProductos] = useState<ProductoConDetalles[]>([]);
   const [categorias, setCategorias] = useState<Categoria[]>([]);
@@ -88,7 +85,7 @@ export default function VitrinaPage() {
       <div className="bg-gradient-to-br from-[#3B82F6] to-[#1E40AF] text-white py-12 px-4 relative">
         <div className="max-w-7xl mx-auto flex justify-between items-start">
           <div>
-            <h1 className="text-4xl font-bold mb-2">Bienvenido a Voltix.OS</h1>
+            <h1 className="text-4xl font-bold mb-2">Bienvenido a Voltix</h1>
             <p className="text-blue-100 text-lg">
               Descubre nuestra selección de productos de alta calidad
             </p>
