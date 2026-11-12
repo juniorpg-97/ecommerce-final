@@ -88,7 +88,7 @@ export default function VitrinaPage() {
       <div className="bg-gradient-to-br from-[#3B82F6] to-[#1E40AF] text-white py-12 px-4 relative">
         <div className="max-w-7xl mx-auto flex justify-between items-start">
           <div>
-            <h1 className="text-4xl font-bold mb-2">Bienvenido a Voltix.OS</h1>
+            <h1 className="text-4xl font-bold mb-2">Bienvenido a Voltix</h1>
             <p className="text-blue-100 text-lg">
               Descubre nuestra selección de productos de alta calidad
             </p>
