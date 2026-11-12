@@ -1,5 +1,4 @@
 import { useEffect, useState, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
 import { productoService } from "../services/productos";
 import { categoriaService } from "../services/categorias";
 import { useCarritoClienteStore } from "../store/carritoClienteStore";
