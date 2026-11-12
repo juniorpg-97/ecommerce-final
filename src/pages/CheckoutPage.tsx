@@ -282,10 +282,7 @@ export default function CheckoutPage() {
                 S/{total.toFixed(2)}
               </span>
             </div>
-            <div className="flex justify-between">
-              <span className="text-[#94A3B8]">Envío</span>
-              <span className="font-mono text-[#10B981]">Gratis</span>
-            </div>
+
             <div className="border-t border-[#334155] pt-2 mt-2 flex justify-between text-lg font-bold">
               <span className="text-[#F1F5F9]">Total</span>
               <span className="text-[#3B82F6]">S/{total.toFixed(2)}</span>
