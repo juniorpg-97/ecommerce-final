@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { useAuthStore } from "../store/authStore";
+// ✅ Importamos los servicios exactos que ya tienes
 import { productoService } from "../services/productos";
+import { ventaService } from "../services/ventas";
+import { cajaService } from "../services/caja";
 
 import type { ProductoConDetalles } from "../types/Producto";
 import {
@@ -8,15 +11,16 @@ import {
   Package,
   ShoppingCart,
   AlertTriangle,
-  TrendingUp,
   DollarSign,
   Users,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
+// ✅ Interfaz actualizada para métricas globales y operativas
 interface Stats {
-  ventasHoy: number;
-  ingresosHoy: number;
+  totalVentas: number;
+  ingresosTotales: number;
+  montoEsperadoCaja: number;
   productosBajoStock: number;
   totalProductos: number;
 }
@@ -26,31 +30,71 @@ export default function DashboardPage() {
   const usuarioRol = useAuthStore((s) => s.usuarioRol);
 
   const [stats, setStats] = useState<Stats>({
-    ventasHoy: 0,
-    ingresosHoy: 0,
+    totalVentas: 0,
+    ingresosTotales: 0,
+    montoEsperadoCaja: 0,
     productosBajoStock: 0,
     totalProductos: 0,
   });
+
   const [productosBajoStock, setProductosBajoStock] = useState<
     ProductoConDetalles[]
   >([]);
   const [cargando, setCargando] = useState<boolean>(true);
 
+  // ✅ Lógica de carga optimizada con cálculo dinámico de caja
   const cargarDatos = async () => {
     setCargando(true);
     try {
-      // Cargar productos
-      const productos = await productoService.getAll();
+      // Jalamos todos los datos en paralelo
+      const [productos, ventas, cajas] = await Promise.all([
+        productoService.getAll(),
+        ventaService.findAll(), // Trae TODO el historial de ventas
+        cajaService.getAll(), // Trae todas las cajas
+      ]);
+
+      // Procesamiento local de productos
       const bajoStock = productos.filter((p) => (p.inventario?.stock ?? 0) < 5);
 
+      // Calcular totales globales desde el array completo de ventas
+      const totalVentas = ventas.length;
+      const montoTotal = ventas.reduce(
+        (sum: number, v: any) => sum + Number(v.totalVenta),
+        0,
+      );
+
+      // ✅ CÁLCULO DINÁMICO DEL MONTO ESPERADO EN TIEMPO REAL
+      const cajaAbierta = cajas.find((c: any) => c.estado === "ABIERTA");
+      let montoEsperado = 0;
+
+      if (cajaAbierta) {
+        // Si la BD ya tiene un valor guardado (ej. caja cerrada/reabierta), lo usamos
+        if (cajaAbierta.montoEsperado) {
+          montoEsperado = Number(cajaAbierta.montoEsperado);
+        } else {
+          // Si es null (caja abierta activa), calculamos: Inicial + Ventas POS de esta caja
+          const ventasDeEstaCaja = ventas.filter(
+            (v: any) => v.cajaId === cajaAbierta.id && v.tipo === "POS",
+          );
+
+          const totalVentasPOS = ventasDeEstaCaja.reduce(
+            (sum: number, v: any) => sum + Number(v.totalVenta),
+            0,
+          );
+
+          montoEsperado = Number(cajaAbierta.montoInicial) + totalVentasPOS;
+        }
+      }
+
       setStats({
-        ventasHoy: 0, // Se actualizará cuando tengamos el endpoint de ventas
-        ingresosHoy: 0,
+        totalVentas,
+        ingresosTotales: montoTotal,
+        montoEsperadoCaja: montoEsperado,
         productosBajoStock: bajoStock.length,
         totalProductos: productos.length,
       });
 
-      setProductosBajoStock(bajoStock.slice(0, 5)); // Mostrar solo los primeros 5
+      setProductosBajoStock(bajoStock.slice(0, 5));
     } catch (err) {
       console.error("Error al cargar datos del dashboard:", err);
     } finally {
@@ -96,47 +140,76 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* Tarjetas de Estadísticas */}
+      {/* ✅ Tarjetas de Estadísticas Actualizadas */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {/* Ventas del Día */}
+        {/* Total Ventas Históricas */}
         <div className="bg-[#1E293B] rounded-lg border border-[#334155] shadow-lg p-6">
           <div className="flex items-center justify-between mb-4">
             <div className="w-12 h-12 rounded-lg bg-blue-500/10 flex items-center justify-center">
               <ShoppingCart className="text-[#3B82F6]" size={24} />
             </div>
-            <span className="text-xs font-medium text-[#94A3B8]">Hoy</span>
+            <span className="text-xs font-medium text-[#94A3B8]">
+              Histórico
+            </span>
           </div>
           <h3 className="text-sm font-medium text-[#94A3B8] mb-1">
-            Ventas del Día
+            Total Ventas
           </h3>
-          <p className="text-2xl font-bold text-[#F1F5F9]">{stats.ventasHoy}</p>
+          <p className="text-2xl font-bold text-[#F1F5F9]">
+            {stats.totalVentas}
+          </p>
           <p className="text-xs text-[#94A3B8] mt-2">
-            <TrendingUp size={12} className="inline text-[#10B981]" /> 0% vs
-            ayer
+            Transacciones registradas
           </p>
         </div>
 
-        {/* Ingresos del Día */}
+        {/* Ingresos Totales */}
         <div className="bg-[#1E293B] rounded-lg border border-[#334155] shadow-lg p-6">
           <div className="flex items-center justify-between mb-4">
             <div className="w-12 h-12 rounded-lg bg-green-500/10 flex items-center justify-center">
               <DollarSign className="text-[#10B981]" size={24} />
             </div>
-            <span className="text-xs font-medium text-[#94A3B8]">Hoy</span>
+            <span className="text-xs font-medium text-[#94A3B8]">
+              Acumulado
+            </span>
           </div>
           <h3 className="text-sm font-medium text-[#94A3B8] mb-1">
-            Ingresos del Día
+            Ingresos Totales
           </h3>
           <p className="text-2xl font-bold text-[#F1F5F9]">
-            s/{stats.ingresosHoy.toLocaleString("es-PE")}
+            S/{" "}
+            {stats.ingresosTotales.toLocaleString("es-PE", {
+              minimumFractionDigits: 2,
+            })}
           </p>
           <p className="text-xs text-[#94A3B8] mt-2">
-            <TrendingUp size={12} className="inline text-[#10B981]" /> 0% vs
-            ayer
+            Desde el inicio del sistema
           </p>
         </div>
 
-        {/* Productos Bajo Stock */}
+        {/* Monto Esperado (Caja Abierta - Tiempo Real) */}
+        <div className="bg-[#1E293B] rounded-lg border border-[#334155] shadow-lg p-6">
+          <div className="flex items-center justify-between mb-4">
+            <div className="w-12 h-12 rounded-lg bg-purple-500/10 flex items-center justify-center">
+              <LayoutDashboard className="text-purple-400" size={24} />
+            </div>
+            <span className="text-xs font-medium text-[#94A3B8]">
+              Caja Activa
+            </span>
+          </div>
+          <h3 className="text-sm font-medium text-[#94A3B8] mb-1">
+            Monto Esperado
+          </h3>
+          <p className="text-2xl font-bold text-[#F1F5F9]">
+            S/{" "}
+            {stats.montoEsperadoCaja.toLocaleString("es-PE", {
+              minimumFractionDigits: 2,
+            })}
+          </p>
+          <p className="text-xs text-[#94A3B8] mt-2">Según sistema POS</p>
+        </div>
+
+        {/* Stock Bajo (Se mantiene igual) */}
         <div className="bg-[#1E293B] rounded-lg border border-[#334155] shadow-lg p-6">
           <div className="flex items-center justify-between mb-4">
             <div className="w-12 h-12 rounded-lg bg-amber-500/10 flex items-center justify-center">
@@ -151,31 +224,12 @@ export default function DashboardPage() {
             {stats.productosBajoStock}
           </p>
           <p className="text-xs text-[#94A3B8] mt-2">
-            Productos con menos de 5 unidades
-          </p>
-        </div>
-
-        {/* Total Productos */}
-        <div className="bg-[#1E293B] rounded-lg border border-[#334155] shadow-lg p-6">
-          <div className="flex items-center justify-between mb-4">
-            <div className="w-12 h-12 rounded-lg bg-purple-500/10 flex items-center justify-center">
-              <Package className="text-purple-400" size={24} />
-            </div>
-            <span className="text-xs font-medium text-[#94A3B8]">Catálogo</span>
-          </div>
-          <h3 className="text-sm font-medium text-[#94A3B8] mb-1">
-            Total Productos
-          </h3>
-          <p className="text-2xl font-bold text-[#F1F5F9]">
-            {stats.totalProductos}
-          </p>
-          <p className="text-xs text-[#94A3B8] mt-2">
-            Productos activos en el sistema
+            Productos con menos de 5 u.
           </p>
         </div>
       </div>
 
-      {/* Accesos Rápidos */}
+      {/* Accesos Rápidos (Sin cambios) */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Link
           to="/productos"
@@ -193,7 +247,7 @@ export default function DashboardPage() {
         </Link>
 
         <Link
-          to="/ventas"
+          to="/historial-ventas"
           className="bg-[#1E293B] rounded-lg border border-[#334155] shadow-lg p-6 hover:bg-[#0F172A] transition-colors"
         >
           <div className="flex items-center gap-4">
@@ -217,7 +271,7 @@ export default function DashboardPage() {
                 <Users className="text-purple-400" size={24} />
               </div>
               <div>
-                <h3 className="font-semibold text-[#F1F5F9]">Usuarios</h3>
+                <h3 className="font-semibold text-[#F1F5F9]">Cajeros</h3>
                 <p className="text-sm text-[#94A3B8]">Gestionar cajeros</p>
               </div>
             </div>
@@ -225,7 +279,7 @@ export default function DashboardPage() {
         )}
       </div>
 
-      {/* Productos con Stock Bajo */}
+      {/* Productos con Stock Bajo (Sin cambios) */}
       {productosBajoStock.length > 0 && (
         <div className="bg-[#1E293B] rounded-lg border border-[#334155] shadow-lg overflow-hidden">
           <div className="px-6 py-4 border-b border-[#334155] bg-[#0F172A]">

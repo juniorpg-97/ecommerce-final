@@ -32,6 +32,11 @@ export const registroSchema = z.object({
       /^(?=.*[A-Z])(?=.*\d)/,
       "La contraseña debe tener al menos una mayúscula y un número",
     ),
+  calle: z.string().min(3, "La calle es requerida"),
+  numero: z.string().min(1, "El número es requerido"),
+  ciudad: z.string().min(3, "La ciudad es requerida"),
+  referencia: z.string().optional(),
+  codigoPostal: z.string().optional(),
 });
 
 export type LoginFormData = z.infer<typeof loginSchema>;

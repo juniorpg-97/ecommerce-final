@@ -7,10 +7,11 @@ interface AuthState {
   verificandoSesion: boolean;
   usuarioNombre: string;
   usuarioRol: string;
+  clienteId: number | null;
   error: string | null;
 
   verificarSesion: () => void;
-  login: (datos: LoginDTO) => Promise<string>; // ✅ Cambiado a Promise<string>
+  login: (datos: LoginDTO) => Promise<string>;
   logout: () => void;
 }
 
@@ -19,18 +20,25 @@ export const useAuthStore = create<AuthState>()((set) => ({
   verificandoSesion: Boolean(localStorage.getItem("token")),
   usuarioNombre: localStorage.getItem("usuarioNombre") ?? "",
   usuarioRol: localStorage.getItem("usuarioRol") ?? "",
+  clienteId: localStorage.getItem("clienteId")
+    ? Number(localStorage.getItem("clienteId"))
+    : null,
   error: null,
 
   verificarSesion: () => {
     const token = localStorage.getItem("token");
     const nombre = localStorage.getItem("usuarioNombre") ?? "";
     const rol = localStorage.getItem("usuarioRol") ?? "";
+    const cId = localStorage.getItem("clienteId")
+      ? Number(localStorage.getItem("clienteId"))
+      : null;
 
     set({
       autenticado: !!token,
       verificandoSesion: false,
       usuarioNombre: nombre,
       usuarioRol: rol,
+      clienteId: cId,
       error: null,
     });
   },
@@ -51,15 +59,20 @@ export const useAuthStore = create<AuthState>()((set) => ({
       localStorage.setItem("usuarioNombre", nombreCompleto);
       localStorage.setItem("usuarioRol", usuario.rol);
 
+      if (usuario.clienteId) {
+        localStorage.setItem("clienteId", String(usuario.clienteId));
+      }
+
       set({
         autenticado: true,
         verificandoSesion: false,
         usuarioNombre: nombreCompleto,
         usuarioRol: usuario.rol,
+        clienteId: usuario.clienteId ?? null,
         error: null,
       });
 
-      return usuario.rol; // ✅ Retorna el rol
+      return usuario.rol;
     } catch (err: unknown) {
       const mensaje = err instanceof Error ? err.message : "Error de conexión";
       set({ error: mensaje });
@@ -71,12 +84,14 @@ export const useAuthStore = create<AuthState>()((set) => ({
     localStorage.removeItem("token");
     localStorage.removeItem("usuarioNombre");
     localStorage.removeItem("usuarioRol");
+    localStorage.removeItem("clienteId");
 
     set({
       autenticado: false,
       verificandoSesion: false,
       usuarioNombre: "",
       usuarioRol: "",
+      clienteId: null,
       error: null,
     });
   },
