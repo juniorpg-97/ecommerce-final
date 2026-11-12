@@ -5,15 +5,13 @@ import { categoriaService } from "../services/categorias";
 import { useCarritoClienteStore } from "../store/carritoClienteStore";
 import type { ProductoConDetalles } from "../types/Producto";
 import type { Categoria } from "../types/Categoria";
-import { ShoppingCart, Package, Search, AlertCircle } from "lucide-react";
+import { Package, Search, AlertCircle } from "lucide-react";
 import { CardProducto } from "../componentes/CardProducto";
 
 export default function VitrinaPage() {
-  const navigate = useNavigate();
   const agregarProducto = useCarritoClienteStore(
     (state) => state.agregarProducto,
   );
-  const contarItems = useCarritoClienteStore((state) => state.contarItems);
 
   const [productos, setProductos] = useState<ProductoConDetalles[]>([]);
   const [categorias, setCategorias] = useState<Categoria[]>([]);
