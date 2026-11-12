@@ -93,19 +93,6 @@ export default function VitrinaPage() {
               Descubre nuestra selección de productos de alta calidad
             </p>
           </div>
-
-          <button
-            onClick={() => navigate("/checkout")}
-            className="relative bg-[#3B82F6] text-white px-4 py-2 rounded-lg font-semibold shadow-lg hover:bg-[#2563EB] transition-colors flex items-center gap-2"
-          >
-            <ShoppingCart size={20} />
-            <span>Ver Carrito</span>
-            {contarItems() > 0 && (
-              <span className="absolute -top-2 -right-2 bg-[#EF4444] text-white text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center">
-                {contarItems()}
-              </span>
-            )}
-          </button>
         </div>
       </div>
 

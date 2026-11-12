@@ -1,5 +1,5 @@
 import { useNavigate, Link } from "react-router-dom";
-import { Mail, Lock, User, UserPlus } from "lucide-react";
+import { Mail, Lock, User, UserPlus, MapPin } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CampoTexto } from "../componentes/ui/CampoTexto";
@@ -36,7 +36,8 @@ export default function RegistroPage() {
       className="min-h-screen flex items-center justify-center p-4"
       style={{ backgroundColor: "#0F172A" }}
     >
-      <div className="w-full max-w-md">
+      {/* ✅ Aumentamos max-w-md a max-w-xl para que quepan los campos de dirección */}
+      <div className="w-full max-w-xl">
         {/* Logo y título */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-[#3B82F6] text-white mb-4 shadow-lg shadow-blue-500/20">
@@ -51,46 +52,112 @@ export default function RegistroPage() {
         {/* Formulario */}
         <div className="bg-[#1E293B] rounded-xl shadow-xl border border-[#334155] p-8">
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-            <div className="grid grid-cols-2 gap-4">
+            {/* Sección 1: Datos Personales */}
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <CampoTexto
+                  id="nombre"
+                  etiqueta="Nombre"
+                  placeholder="Carlos"
+                  icono={<User size={18} />}
+                  error={errors.nombre?.message}
+                  {...register("nombre")}
+                />
+                <CampoTexto
+                  id="apellido"
+                  etiqueta="Apellido"
+                  placeholder="Vega"
+                  icono={<User size={18} />}
+                  error={errors.apellido?.message}
+                  {...register("apellido")}
+                />
+              </div>
+
               <CampoTexto
-                id="nombre"
-                etiqueta="Nombre"
-                placeholder="Carlos"
-                icono={<User size={18} />}
-                error={errors.nombre?.message}
-                {...register("nombre")}
+                id="email"
+                etiqueta="Correo Electrónico"
+                type="email"
+                placeholder="usuario@voltix.com"
+                icono={<Mail size={18} />}
+                autoComplete="email"
+                error={errors.email?.message}
+                {...register("email")}
               />
+
               <CampoTexto
-                id="apellido"
-                etiqueta="Apellido"
-                placeholder="Vega"
-                icono={<User size={18} />}
-                error={errors.apellido?.message}
-                {...register("apellido")}
+                id="password"
+                etiqueta="Contraseña"
+                type="password"
+                placeholder="Mínimo 8 caracteres, 1 mayúscula y 1 número"
+                icono={<Lock size={18} />}
+                autoComplete="new-password"
+                error={errors.password?.message}
+                {...register("password")}
               />
             </div>
 
-            <CampoTexto
-              id="email"
-              etiqueta="Correo Electrónico"
-              type="email"
-              placeholder="usuario@voltix.com"
-              icono={<Mail size={18} />}
-              autoComplete="email"
-              error={errors.email?.message}
-              {...register("email")}
-            />
+            {/* ✅ NUEVA SECCIÓN: Dirección de Envío */}
+            <div className="space-y-4 pt-4 border-t border-[#334155]">
+              <h3 className="text-lg font-semibold text-[#F1F5F9] flex items-center gap-2">
+                <MapPin size={20} className="text-[#3B82F6]" />
+                Dirección de Envío
+              </h3>
 
-            <CampoTexto
-              id="password"
-              etiqueta="Contraseña"
-              type="password"
-              placeholder="Mínimo 8 caracteres, 1 mayúscula y 1 número"
-              icono={<Lock size={18} />}
-              autoComplete="new-password"
-              error={errors.password?.message}
-              {...register("password")}
-            />
+              <CampoTexto
+                id="calle"
+                etiqueta="Calle / Avenida"
+                placeholder="Av. Principal"
+                icono={<MapPin size={18} />}
+                error={errors.calle?.message}
+                {...register("calle")}
+              />
+
+              <div className="grid grid-cols-2 gap-4">
+                <CampoTexto
+                  id="numero"
+                  etiqueta="Número"
+                  placeholder="123"
+                  error={errors.numero?.message}
+                  {...register("numero")}
+                />
+                <CampoTexto
+                  id="codigoPostal"
+                  etiqueta="Código Postal"
+                  placeholder="15001"
+                  error={errors.codigoPostal?.message}
+                  {...register("codigoPostal")}
+                />
+              </div>
+
+              <CampoTexto
+                id="ciudad"
+                etiqueta="Ciudad / Distrito"
+                placeholder="Lima"
+                error={errors.ciudad?.message}
+                {...register("ciudad")}
+              />
+
+              <div className="space-y-1">
+                <label
+                  htmlFor="referencia"
+                  className="block text-sm font-medium text-[#F1F5F9]"
+                >
+                  Referencia (opcional)
+                </label>
+                <textarea
+                  id="referencia"
+                  rows={2}
+                  placeholder="Ej: Frente al parque, casa azul"
+                  className="w-full rounded-lg border border-[#334155] bg-[#0F172A] px-3 py-2.5 text-sm text-[#F1F5F9] placeholder-[#64748B] focus:border-[#3B82F6] focus:ring-2 focus:ring-blue-500/20 focus:outline-none transition-all"
+                  {...register("referencia")}
+                />
+                {errors.referencia && (
+                  <p className="text-xs text-[#EF4444] mt-1">
+                    {errors.referencia.message}
+                  </p>
+                )}
+              </div>
+            </div>
 
             {/* Términos y condiciones */}
             <label className="flex items-start gap-2 cursor-pointer">
