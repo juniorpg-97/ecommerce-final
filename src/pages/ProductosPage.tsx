@@ -26,15 +26,13 @@ export default function ProductosPage() {
     setCargando(true);
     setError(null);
     try {
-      // Cargar categorías activas para el filtro
       const cats = await categoriaService.getAll(true);
       setCategorias(cats);
 
-      // Cargar productos con sus detalles
       const prods = await productoService.getAll();
       setProductos(prods);
     } catch (err: unknown) {
-      setError("Error al cargar los productos. Verifica tu conexión.");
+      setError("Error al cargar los productos");
     } finally {
       setCargando(false);
     }
@@ -44,7 +42,6 @@ export default function ProductosPage() {
     cargarDatos();
   }, []);
 
-  // Filtrar productos por categoría y búsqueda
   const productosFiltrados = productos.filter((producto) => {
     const coincideCategoria =
       categoriaFiltro === "todas" ||
@@ -63,7 +60,7 @@ export default function ProductosPage() {
     ) {
       try {
         await productoService.delete(id);
-        await cargarDatos(); // Recargar la lista
+        await cargarDatos();
       } catch (err: unknown) {
         alert("Error al eliminar el producto.");
       }
@@ -97,7 +94,6 @@ export default function ProductosPage() {
         </Link>
       </div>
 
-      {/* Filtros y Búsqueda */}
       <div className="bg-[#1E293B] p-4 rounded-lg border border-[#334155] shadow-lg">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Filtro por categoría */}
@@ -125,7 +121,6 @@ export default function ProductosPage() {
             </select>
           </div>
 
-          {/* Búsqueda por nombre */}
           <div>
             <label className="block text-sm font-medium text-[#F1F5F9] mb-2">
               Buscar Producto:
@@ -147,7 +142,6 @@ export default function ProductosPage() {
         </div>
       </div>
 
-      {/* Estado de carga o error */}
       {cargando && (
         <div className="text-center py-12 text-[#94A3B8]">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#3B82F6] mx-auto mb-2"></div>
@@ -162,7 +156,6 @@ export default function ProductosPage() {
         </div>
       )}
 
-      {/* Tabla de Productos */}
       {!cargando && !error && (
         <div className="bg-[#1E293B] rounded-lg border border-[#334155] shadow-lg overflow-hidden">
           <div className="overflow-x-auto">

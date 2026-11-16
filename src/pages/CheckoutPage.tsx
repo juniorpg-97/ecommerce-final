@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import {
   ShoppingCart,
   CreditCard,
@@ -12,7 +11,6 @@ import {
   Loader2,
 } from "lucide-react";
 import { useCarritoClienteStore } from "../store/carritoClienteStore";
-// ✅ IMPORTANTE: Importamos el store de auth para obtener el clienteId
 import { useAuthStore } from "../store/authStore";
 import { pedidoService } from "../services/pedidos";
 import { direccionService } from "../services/direcciones";
@@ -20,38 +18,16 @@ import { carritoService } from "../services/carrito";
 import { Boton } from "../componentes/ui/Boton";
 import { CampoTexto } from "../componentes/ui/CampoTexto";
 import type { Direccion } from "../types/Direccion";
-
-const checkoutSchema = z.object({
-  direccionId: z.number().min(1, "Selecciona una dirección"),
-  metodoPago: z.enum([
-    "EFECTIVO",
-    "TARJETA",
-    "TRANSFERENCIA",
-    "YAPE",
-    "PLIN",
-    "OTRO",
-    "MOCKPAY",
-  ]),
-});
-
-type CheckoutFormData = z.infer<typeof checkoutSchema>;
-
-// ✅ Schema para crear dirección desde el checkout
-const direccionFormSchema = z.object({
-  calle: z.string().min(3, "La calle es requerida"),
-  numero: z.string().min(1, "El número es requerido"),
-  ciudad: z.string().min(3, "La ciudad es requerida"),
-  referencia: z.string().optional(),
-  codigoPostal: z.string().optional(),
-});
-
-type DireccionFormData = z.infer<typeof direccionFormSchema>;
+import {
+  checkoutSchema,
+  type CheckoutFormData,
+  direccionFormSchema,
+  type DireccionFormData,
+} from "../schemas/checkout";
 
 export default function CheckoutPage() {
   const navigate = useNavigate();
 
-  // ✅ OBTENEMOS EL CLIENTEID DEL STORE DE AUTENTICACIÓN
-  // Asegúrate de que tu store guarde el 'clienteId' al hacer login
   const clienteId = useAuthStore((state) => state.clienteId);
 
   const { items, calcularSubtotal, limpiarCarrito, hayStockInsuficiente } =
@@ -62,7 +38,6 @@ export default function CheckoutPage() {
   const [direcciones, setDirecciones] = useState<Direccion[]>([]);
   const [cargandoDirecciones, setCargandoDirecciones] = useState(true);
 
-  // Estados para el formulario de dirección inline
   const [mostrarFormDireccion, setMostrarFormDireccion] = useState(false);
   const [creandoDireccion, setCreandoDireccion] = useState(false);
   const [errorDireccion, setErrorDireccion] = useState<string | null>(null);
@@ -76,13 +51,14 @@ export default function CheckoutPage() {
     resolver: zodResolver(checkoutSchema),
   });
 
-  // Formulario para crear dirección
   const {
     register: registerDir,
     handleSubmit: handleDirSubmit,
     reset: resetDirForm,
     formState: { errors: errorsDir },
-  } = useForm<DireccionFormData>();
+  } = useForm<DireccionFormData>({
+    resolver: zodResolver(direccionFormSchema),
+  });
 
   const total = calcularSubtotal();
 
@@ -96,7 +72,6 @@ export default function CheckoutPage() {
         setValue("direccionId", dirs[0].id);
         setMostrarFormDireccion(false);
       } else {
-        // Si no hay direcciones, abrir el formulario automáticamente
         setMostrarFormDireccion(true);
       }
     } catch (err) {
@@ -111,7 +86,6 @@ export default function CheckoutPage() {
     cargarDirecciones();
   }, [setValue]);
 
-  // ✅ HANDLER CORREGIDO PARA CREAR DIRECCIÓN
   const onCreateDireccion = async (datos: DireccionFormData) => {
     if (!clienteId) {
       setErrorDireccion(
@@ -124,7 +98,6 @@ export default function CheckoutPage() {
     setErrorDireccion(null);
 
     try {
-      // ✅ PASAMOS LOS 2 ARGUMENTOS QUE ESPERA TU SERVICIO: (clienteId, datos)
       await direccionService.create(clienteId, {
         calle: datos.calle,
         numero: datos.numero,
@@ -133,7 +106,6 @@ export default function CheckoutPage() {
         codigoPostal: datos.codigoPostal || "00000",
       });
 
-      // Recargar direcciones y cerrar formulario
       await cargarDirecciones();
       resetDirForm();
     } catch (err: any) {
@@ -226,7 +198,6 @@ export default function CheckoutPage() {
       </h1>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Resumen del Pedido */}
         <div className="lg:col-span-2 space-y-4">
           <div className="bg-[#1E293B] rounded-lg border border-[#334155] shadow-lg p-4">
             <h2 className="font-semibold text-[#F1F5F9] mb-4">
@@ -254,8 +225,6 @@ export default function CheckoutPage() {
             onSubmit={handleSubmit(onSubmit)}
             className="bg-[#1E293B] rounded-lg border border-[#334155] shadow-lg p-6 space-y-6"
           >
-            {/* SECCIÓN DE DIRECCIÓN MEJORADA */}
-            {/* ✅ SECCIÓN DE DIRECCIÓN CORREGIDA */}
             <div>
               <div className="flex items-center justify-between mb-2">
                 <label className="block text-sm font-medium text-[#F1F5F9] flex items-center gap-2">
@@ -476,7 +445,6 @@ export default function CheckoutPage() {
           </form>
         </div>
 
-        {/* Total */}
         <div className="bg-[#1E293B] rounded-lg border border-[#334155] shadow-lg p-6 h-fit">
           <h3 className="font-semibold text-[#F1F5F9] mb-4">Resumen</h3>
           <div className="space-y-2 text-sm">

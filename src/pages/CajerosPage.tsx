@@ -27,7 +27,6 @@ export default function CajerosPage() {
   const [error, setError] = useState<string | null>(null);
   const [mostrarFormulario, setMostrarFormulario] = useState<boolean>(false);
 
-  // Estados del formulario
   const [nombre, setNombre] = useState<string>("");
   const [apellido, setApellido] = useState<string>("");
   const [email, setEmail] = useState<string>("");
@@ -39,11 +38,6 @@ export default function CajerosPage() {
     setCargando(true);
     setError(null);
     try {
-      // TODO: Reemplazar con el endpoint real cuando esté disponible
-      // const usuariosData = await userService.getAll();
-      // setUsuarios(usuariosData);
-
-      // Placeholder: lista vacía por ahora
       setUsuarios([]);
     } catch (err: unknown) {
       setError("Error al cargar los usuarios.");
@@ -62,17 +56,14 @@ export default function CajerosPage() {
     setCreando(true);
 
     try {
-      // Usamos el endpoint de registro, pero pasando el rol
-      // TODO: Ajustar si el backend requiere un endpoint diferente para admin
       await authService.register({
         nombre,
         apellido,
         email,
         password,
-        rol, // Si el backend no acepta rol, esto fallará y ajustamos
+        rol,
       } as any);
 
-      // Limpiar formulario
       setNombre("");
       setApellido("");
       setEmail("");
@@ -80,7 +71,6 @@ export default function CajerosPage() {
       setRol("CAJERO");
       setMostrarFormulario(false);
 
-      // Recargar lista
       await cargarUsuarios();
 
       alert(`Usuario ${nombre} ${apellido} creado exitosamente con rol ${rol}`);
@@ -94,8 +84,6 @@ export default function CajerosPage() {
   const handleEliminarUsuario = async (_id: number, nombre: string) => {
     if (window.confirm(`¿Estás seguro de eliminar al usuario ${nombre}?`)) {
       try {
-        // TODO: Reemplazar con el endpoint real
-        // await userService.delete(id);
         await cargarUsuarios();
         alert("Usuario eliminado (pendiente de implementar endpoint)");
       } catch (err: unknown) {
@@ -109,7 +97,6 @@ export default function CajerosPage() {
       className="space-y-6 min-h-screen p-6"
       style={{ backgroundColor: "#0F172A" }}
     >
-      {/* Encabezado */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-[#F1F5F9] flex items-center gap-2">
@@ -130,7 +117,6 @@ export default function CajerosPage() {
         </Boton>
       </div>
 
-      {/* Formulario de Creación */}
       {mostrarFormulario && (
         <div className="bg-[#1E293B] rounded-lg border border-[#334155] shadow-lg p-6">
           <h2 className="text-lg font-semibold text-[#F1F5F9] mb-4 flex items-center gap-2">
@@ -187,7 +173,6 @@ export default function CajerosPage() {
               minLength={8}
             />
 
-            {/* Selector de Rol */}
             <div>
               <label className="block text-sm font-medium text-[#F1F5F9] mb-2">
                 Rol del Usuario:
@@ -247,7 +232,6 @@ export default function CajerosPage() {
               </div>
             </div>
 
-            {/* Mensaje de error */}
             {error && (
               <div className="flex items-start gap-2 p-3 rounded-lg bg-red-950/30 border border-red-900/50 text-red-400 text-sm">
                 <AlertCircle size={16} className="mt-0.5 flex-shrink-0" />
@@ -255,7 +239,6 @@ export default function CajerosPage() {
               </div>
             )}
 
-            {/* Botones de acción */}
             <div className="flex gap-3 pt-2">
               <Boton
                 type="submit"
@@ -303,7 +286,6 @@ export default function CajerosPage() {
         </div>
       )}
 
-      {/* Lista de Usuarios */}
       <div className="bg-[#1E293B] rounded-lg border border-[#334155] shadow-lg overflow-hidden">
         <div className="px-6 py-4 border-b border-[#334155] bg-[#0F172A]">
           <h2 className="font-semibold text-[#F1F5F9]">Usuarios Registrados</h2>

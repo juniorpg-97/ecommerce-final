@@ -117,7 +117,7 @@ export default function LayoutCliente() {
       {/* Footer simple */}
       <footer className="bg-[#0F172A] border-t border-[#334155] py-6 mt-auto">
         <div className="max-w-7xl mx-auto px-4 lg:px-8 text-center text-sm text-[#64748B]">
-          © 2024 Voltix.OS - Tienda en línea
+          © 2026 Voltix.OS - Tienda en línea
         </div>
       </footer>
     </div>

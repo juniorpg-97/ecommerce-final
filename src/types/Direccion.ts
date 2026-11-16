@@ -1,7 +1,3 @@
-// ======================================================
-// ENTIDAD PRINCIPAL (Basada en el schema de Prisma)
-// ======================================================
-
 export interface Direccion {
   id: number;
   clienteId: number;
@@ -14,10 +10,6 @@ export interface Direccion {
   creadoEn: string;
   actualizadoEn: string;
 }
-
-// ======================================================
-// DTOs (Data Transfer Objects) para Formularios
-// ======================================================
 
 export interface DireccionCreacionDTO {
   calle: string;

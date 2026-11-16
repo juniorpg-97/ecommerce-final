@@ -40,7 +40,7 @@ export default function LayoutStaff() {
   const enlacesAdmin: EnlaceMenu[] = [
     {
       path: "/dashboard",
-      label: "Dashboard Ejecutivo",
+      label: "Dashboard",
       icono: LayoutDashboard,
     },
     { path: "/productos", label: "Inventario & Stock", icono: Package },
@@ -61,7 +61,7 @@ export default function LayoutStaff() {
   const enlacesCajero: EnlaceMenu[] = [
     {
       path: "/dashboard",
-      label: "Dashboard Ejecutivo",
+      label: "Dashboard",
       icono: LayoutDashboard,
     },
     { path: "/productos", label: "Inventario & Stock", icono: Package },
@@ -101,19 +101,18 @@ export default function LayoutStaff() {
                   fontFamily: "'Plus Jakarta Sans', sans-serif",
                 }}
               >
-                VOLTIX
+                VOLTIX.OS
               </span>
               <span
                 className="block text-[10px] uppercase tracking-widest font-semibold"
                 style={{ color: "#3B82F6" }}
               >
-                CORE POS
+                POS
               </span>
             </div>
           </Link>
         </div>
 
-        {/* Perfil de Usuario */}
         <div className="p-3 border-b" style={{ borderColor: "#334155" }}>
           <div
             className="flex items-center gap-2 p-2 rounded-lg"
@@ -145,7 +144,6 @@ export default function LayoutStaff() {
           </div>
         </div>
 
-        {/* Navegación */}
         <nav className="flex-1 p-2 space-y-1 overflow-y-auto">
           <div className="px-2 mb-1.5">
             <p
@@ -239,7 +237,6 @@ export default function LayoutStaff() {
           })}
         </nav>
 
-        {/* Estado de Caja */}
         <div className="p-3 border-t" style={{ borderColor: "#334155" }}>
           <div
             className="flex items-center justify-between p-2 rounded-lg mb-2"
@@ -277,12 +274,10 @@ export default function LayoutStaff() {
         </div>
       </aside>
 
-      {/* Contenido Principal - 🔥 TAMBIÉN AGREGAR FONDO OSCURO */}
       <div
         className="flex-1 lg:ml-64 flex flex-col min-h-screen"
         style={{ backgroundColor: "#0F172A" }}
       >
-        {/* Header Móvil */}
         <header
           className="lg:hidden h-14 border-b flex items-center justify-between px-4 sticky top-0 z-40 backdrop-blur-xl"
           style={{ backgroundColor: "#0F172A", borderColor: "#334155" }}
@@ -308,7 +303,6 @@ export default function LayoutStaff() {
           <div className="w-6"></div>
         </header>
 
-        {/* Main Content - 🔥 AGREGAR FONDO OSCURO AQUÍ TAMBIÉN */}
         <main
           className="flex-1 p-4 lg:p-6"
           style={{ backgroundColor: "#0F172A" }}
@@ -317,7 +311,6 @@ export default function LayoutStaff() {
         </main>
       </div>
 
-      {/* Sidebar Mobile Overlay */}
       {menuAbierto && (
         <div className="lg:hidden fixed inset-0 z-50 flex">
           <div

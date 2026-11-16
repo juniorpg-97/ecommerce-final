@@ -11,7 +11,6 @@ import { pedidoService } from "../services/pedidos";
 import { Boton } from "../componentes/ui/Boton";
 import type { Pedido, EstadoPedido } from "../types/Pedido";
 
-// ✅ COLORES ACTUALIZADOS PARA MODO OSCURO (Tarjetas)
 const ESTADOS_POSIBLES: Record<
   EstadoPedido,
   { label: string; color: string; next?: EstadoPedido }
@@ -116,7 +115,7 @@ export default function PedidosPage() {
           onClick={cargarPedidos}
           className="bg-[#1E293B] hover:bg-[#334155] text-[#F1F5F9] border border-[#475569] font-semibold transition-all"
         >
-          🔄 Actualizar
+          Actualizar
         </Boton>
       </div>
 

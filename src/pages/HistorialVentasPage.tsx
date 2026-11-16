@@ -71,14 +71,14 @@ export default function HistorialVentasPage() {
               (d: any) => `
             <div class="item">
               <span>${d.cantidad}x ${d.producto.nombre}</span>
-              <span>$${Number(d.subtotal).toFixed(2)}</span>
+              <span>S/${Number(d.subtotal).toFixed(2)}</span>
             </div>
           `,
             )
             .join("")}
         </div>
         <div class="total">
-          Total: $${Number(venta.totalVenta).toFixed(2)}
+          Total: S/${Number(venta.totalVenta).toFixed(2)}
         </div>
         <div class="footer">
           <p>Gracias por su compra</p>
@@ -98,7 +98,6 @@ export default function HistorialVentasPage() {
       className="space-y-6 min-h-screen p-6"
       style={{ backgroundColor: "#0F172A" }}
     >
-      {/* Encabezado */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-[#F1F5F9] flex items-center gap-2">
@@ -111,7 +110,6 @@ export default function HistorialVentasPage() {
         </div>
       </div>
 
-      {/* Filtro de fecha */}
       <div className="bg-[#1E293B] rounded-lg border border-[#334155] shadow-lg p-4">
         <div className="flex items-center gap-4">
           <label className="flex items-center gap-2 text-sm font-medium text-[#F1F5F9]">
@@ -127,7 +125,6 @@ export default function HistorialVentasPage() {
         </div>
       </div>
 
-      {/* Estado de carga */}
       {cargando && (
         <div className="text-center py-12">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#3B82F6] mx-auto mb-4"></div>
@@ -135,7 +132,6 @@ export default function HistorialVentasPage() {
         </div>
       )}
 
-      {/* Lista de ventas */}
       {!cargando && (
         <div className="bg-[#1E293B] rounded-lg border border-[#334155] shadow-lg overflow-hidden">
           {ventas.length === 0 ? (
@@ -150,7 +146,6 @@ export default function HistorialVentasPage() {
                   key={venta.id}
                   className="p-4 hover:bg-[#0F172A] transition-colors"
                 >
-                  {/* Resumen de venta */}
                   <div className="flex items-center justify-between">
                     <div className="flex-1">
                       <div className="flex items-center gap-4 flex-wrap">
@@ -196,7 +191,6 @@ export default function HistorialVentasPage() {
                     </div>
                   </div>
 
-                  {/* Detalles expandibles */}
                   {ventaExpandida === venta.id && (
                     <div className="mt-4 pt-4 border-t border-[#334155]">
                       <h3 className="font-semibold text-[#F1F5F9] mb-3">
@@ -226,7 +220,6 @@ export default function HistorialVentasPage() {
         </div>
       )}
 
-      {/* Resumen del día */}
       {!cargando && ventas.length > 0 && (
         <div className="bg-[#1E293B] rounded-lg border border-[#334155] shadow-lg p-4">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">

@@ -1,13 +1,9 @@
 import { useEffect, lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useAuthStore } from "./store/authStore";
-
-// Layouts y Protección
 import LayoutCliente from "./componentes/LayoutCliente";
 import LayoutStaff from "./componentes/LayoutStaff";
 import { RutaProtegida } from "./componentes/RutaProtegida";
-
-// Páginas de carga inmediata (Eager loading)
 import LoginPage from "./pages/LoginPage";
 import RegistroPage from "./pages/RegistroPage";
 import VitrinaPage from "./pages/VitrinaPage";
@@ -21,12 +17,10 @@ import HistorialVentasPage from "./pages/HistorialVentasPage";
 import PedidosPage from "./pages/PedidosPage";
 import SinAccesoPage from "./pages/SinAcceso";
 
-// ✂️ PÁGINAS CON CODE SPLITTING (Lazy loading)
 const CajerosPage = lazy(() => import("./pages/CajerosPage"));
 const AbrirCajaPage = lazy(() => import("./pages/AbrirCajaPage"));
 const CerrarCajaPage = lazy(() => import("./pages/CerrarCajaPage"));
 
-// Componente de carga (Fallback) para el Suspense
 const LoadingFallback = () => (
   <div className="flex h-screen items-center justify-center bg-[#0F172A]">
     <div className="text-center">
@@ -58,33 +52,18 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* ======================================================
-            1. RUTAS PÚBLICAS (Cliente)
-        ====================================================== */}
         <Route element={<LayoutCliente />}>
           <Route path="/" element={<VitrinaPage />} />
           <Route path="/registro" element={<RegistroPage />} />
         </Route>
-
-        {/* ======================================================
-            2. RUTAS DE AUTENTICACIÓN (Sin layout)
-        ====================================================== */}
         <Route path="/login" element={<LoginPage />} />
         <Route path="/sin-acceso" element={<SinAccesoPage />} />
-
-        {/* ======================================================
-            3. RUTAS PROTEGIDAS: CLIENTE AUTENTICADO
-        ====================================================== */}
         <Route element={<RutaProtegida rolesPermitidos={["CLIENTE"]} />}>
           <Route element={<LayoutCliente />}>
             <Route path="/checkout" element={<CheckoutPage />} />
             <Route path="/mis-pedidos" element={<MisPedidosPage />} />
           </Route>
         </Route>
-
-        {/* ======================================================
-            4. RUTAS PROTEGIDAS: STAFF (ADMINISTRADOR Y CAJERO)
-        ====================================================== */}
         <Route
           element={
             <RutaProtegida rolesPermitidos={["ADMINISTRADOR", "CAJERO"]} />
@@ -98,7 +77,6 @@ function App() {
             <Route path="/historial-ventas" element={<HistorialVentasPage />} />
             <Route path="/pedidos" element={<PedidosPage />} />
 
-            {/* Rutas SOLO para Administrador (anidadas) con Code Splitting */}
             <Route
               element={<RutaProtegida rolesPermitidos={["ADMINISTRADOR"]} />}
             >
@@ -130,9 +108,6 @@ function App() {
           </Route>
         </Route>
 
-        {/* ======================================================
-            5. RUTA COMODÍN (Redirige a la raíz)
-        ====================================================== */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>

@@ -7,7 +7,6 @@ export const authService = {
     return respuesta.data;
   },
 
-  // ✅ ESTA ES LA CLAVE: Debe apuntar a /auth/register-cliente
   register: async (datos: RegistroDTO) => {
     const respuesta = await api.post("/auth/register-cliente", datos);
     return respuesta.data;

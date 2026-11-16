@@ -47,7 +47,6 @@ export const useAuthStore = create<AuthState>()((set) => ({
     set({ error: null });
     try {
       const respuesta = await authService.login(datos);
-
       if (!respuesta || !respuesta.token || !respuesta.usuario) {
         throw new Error("Respuesta inválida del servidor");
       }

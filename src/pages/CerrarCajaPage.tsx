@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+
 import {
   DollarSign,
   AlertCircle,
@@ -12,12 +12,7 @@ import {
 } from "lucide-react";
 import { cajaService } from "../services/caja";
 import { Boton } from "../componentes/ui/Boton";
-
-const cerrarCajaSchema = z.object({
-  montoContado: z.number().min(0, "El monto contado no puede ser negativo"),
-});
-
-type CerrarCajaFormData = z.infer<typeof cerrarCajaSchema>;
+import { cerrarCajaSchema, type CerrarCajaFormData } from "../schemas/caja";
 
 export default function CerrarCajaPage() {
   const navigate = useNavigate();
@@ -192,7 +187,6 @@ export default function CerrarCajaPage() {
       </h1>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Columna Izquierda: Desglose del Sistema */}
         <div className="bg-[#1E293B] rounded-lg border border-[#334155] shadow-lg p-6">
           <h3 className="font-semibold text-[#F1F5F9] mb-4 flex items-center gap-2">
             <TrendingUp size={18} className="text-[#3B82F6]" />
@@ -208,7 +202,7 @@ export default function CerrarCajaPage() {
             <div className="flex justify-between items-center py-2 border-b border-[#334155]">
               <span className="text-[#94A3B8]">Total Ventas POS</span>
               <span className="font-mono font-medium text-[#10B981]">
-                + ${conciliacion.totalVentasPOS.toFixed(2)}
+                + S/{conciliacion.totalVentasPOS.toFixed(2)}
               </span>
             </div>
             <div className="flex justify-between items-center py-3 bg-blue-500/10 px-3 rounded-lg border border-blue-500/30">
@@ -246,7 +240,6 @@ export default function CerrarCajaPage() {
           </div>
         </div>
 
-        {/* Columna Derecha: Formulario de Cierre */}
         <div className="bg-[#1E293B] rounded-lg border border-[#334155] shadow-lg p-6">
           <h3 className="font-semibold text-[#F1F5F9] mb-4 flex items-center gap-2">
             <TrendingDown size={18} className="text-[#F97316]" />
@@ -256,7 +249,7 @@ export default function CerrarCajaPage() {
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             <div>
               <label className="block text-sm font-medium text-[#F1F5F9] mb-2">
-                Efectivo Físico Contado ($)
+                Efectivo Físico Contado (S/)
               </label>
               <input
                 type="number"
@@ -272,7 +265,6 @@ export default function CerrarCajaPage() {
               )}
             </div>
 
-            {/* Panel de Diferencia en Tiempo Real */}
             <div
               className={`rounded-lg p-4 border ${esCuadre ? "bg-green-500/10 border-green-500/30" : falta ? "bg-red-500/10 border-red-500/30" : "bg-amber-500/10 border-amber-500/30"}`}
             >

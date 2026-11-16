@@ -96,7 +96,6 @@ export default function RegistroPage() {
               />
             </div>
 
-            {/* ✅ NUEVA SECCIÓN: Dirección de Envío */}
             <div className="space-y-4 pt-4 border-t border-[#334155]">
               <h3 className="text-lg font-semibold text-[#F1F5F9] flex items-center gap-2">
                 <MapPin size={20} className="text-[#3B82F6]" />
@@ -159,7 +158,6 @@ export default function RegistroPage() {
               </div>
             </div>
 
-            {/* Términos y condiciones */}
             <label className="flex items-start gap-2 cursor-pointer">
               <input
                 type="checkbox"
@@ -184,7 +182,6 @@ export default function RegistroPage() {
               </span>
             </label>
 
-            {/* Botón de registro */}
             <Boton
               type="submit"
               variante="primario"
@@ -221,7 +218,6 @@ export default function RegistroPage() {
             </Boton>
           </form>
 
-          {/* Enlace a login */}
           <div className="mt-6 text-center text-sm text-[#94A3B8]">
             <p>
               ¿Ya tienes una cuenta?{" "}
@@ -235,7 +231,6 @@ export default function RegistroPage() {
           </div>
         </div>
 
-        {/* Footer */}
         <p className="text-center text-xs text-[#64748B] mt-6">
           © 2024 Voltix.OS - Sistema de Punto de Venta y E-commerce
         </p>

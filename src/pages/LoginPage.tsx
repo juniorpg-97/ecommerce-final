@@ -151,14 +151,14 @@ export default function LoginPage() {
                 to="/registro"
                 className="text-[#3B82F6] hover:text-[#2563EB] font-semibold hover:underline transition-colors"
               >
-                Regístrate como cliente
+                Regístrate
               </Link>
             </p>
           </div>
         </div>
 
         <p className="text-center text-xs text-[#64748B] mt-6">
-          © 2024 Voltix.OS - Sistema de Punto de Venta y E-commerce
+          © 2026 Voltix.OS - Sistema de Punto de Venta y E-commerce
         </p>
       </div>
     </div>

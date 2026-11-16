@@ -21,17 +21,12 @@ interface ClienteApi {
   };
 }
 
-// Para actualizaciones parciales
 interface ClienteApiUpdate {
   nombre?: string;
   apellido?: string;
   telefono?: string | null;
   activo?: boolean;
 }
-
-// ======================================================
-// 2. FUNCIONES MAPEADORAS (Desacoplamiento y Tipado Estricto)
-// ======================================================
 
 const convertirCliente = (cliente: ClienteApi): Cliente => ({
   id: cliente.id,
@@ -45,7 +40,6 @@ const convertirCliente = (cliente: ClienteApi): Cliente => ({
   actualizadoEn: cliente.actualizadoEn,
 });
 
-// Solo incluye los campos que realmente vienen definidos para evitar enviar "undefined"
 const convertirDatosUpdate = (
   datos: ClienteActualizacionDTO,
 ): ClienteApiUpdate => ({
@@ -55,12 +49,7 @@ const convertirDatosUpdate = (
   ...(datos.activo !== undefined && { activo: datos.activo }),
 });
 
-// ======================================================
-// 3. SERVICIO DE CLIENTES
-// ======================================================
-
 export const clienteService = {
-  // A. Obtener todos los clientes (con filtro opcional de estado)
   getAll: async (activo?: boolean): Promise<Cliente[]> => {
     const params: Record<string, boolean> = {};
     if (activo !== undefined) params.activo = activo;
@@ -69,7 +58,6 @@ export const clienteService = {
     return respuesta.data.map(convertirCliente);
   },
 
-  // B. Obtener clientes paginados (para el dashboard de admin)
   getPagina: async (
     pagina: number,
     porPagina: number,
@@ -91,19 +79,16 @@ export const clienteService = {
     };
   },
 
-  // C. Obtener un cliente específico por ID
   getById: async (id: number): Promise<Cliente> => {
     const respuesta = await api.get<ClienteApi>(`/clientes/${id}`);
     return convertirCliente(respuesta.data);
   },
 
-  // D. Obtener el perfil del cliente actual (el usuario logueado)
   getPerfil: async (): Promise<Cliente> => {
     const respuesta = await api.get<ClienteApi>("/clientes/perfil");
     return convertirCliente(respuesta.data);
   },
 
-  // E. Actualizar datos del cliente (PATCH parcial)
   update: async (
     id: number,
     datos: ClienteActualizacionDTO,
@@ -115,7 +100,6 @@ export const clienteService = {
     return convertirCliente(respuesta.data);
   },
 
-  // F. Desactivar cliente (soft delete)
   desactivar: async (id: number): Promise<Cliente> => {
     const respuesta = await api.patch<ClienteApi>(`/clientes/${id}`, {
       activo: false,
@@ -123,7 +107,6 @@ export const clienteService = {
     return convertirCliente(respuesta.data);
   },
 
-  // G. Activar cliente previamente desactivado
   activar: async (id: number): Promise<Cliente> => {
     const respuesta = await api.patch<ClienteApi>(`/clientes/${id}`, {
       activo: true,
@@ -131,7 +114,6 @@ export const clienteService = {
     return convertirCliente(respuesta.data);
   },
 
-  // H. Eliminar cliente físicamente (hard delete - usar con precaución)
   delete: async (id: number): Promise<void> => {
     await api.delete(`/clientes/${id}`);
   },
