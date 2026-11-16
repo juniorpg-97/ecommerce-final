@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAuthStore } from "../store/authStore";
-// ✅ Importamos los servicios exactos que ya tienes
+
 import { productoService } from "../services/productos";
 import { ventaService } from "../services/ventas";
 import { cajaService } from "../services/caja";

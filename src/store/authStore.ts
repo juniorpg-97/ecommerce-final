@@ -1,7 +1,6 @@
 import { create } from "zustand";
 import { authService } from "../services/auth";
 import type { LoginDTO } from "../types/auth";
-// ✅ 1. IMPORTAR EL STORE DEL CARRITO DEL CLIENTE
 import { useCarritoClienteStore } from "./carritoClienteStore";
 
 interface AuthState {
