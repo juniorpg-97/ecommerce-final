@@ -1,6 +1,8 @@
 import { create } from "zustand";
 import { authService } from "../services/auth";
 import type { LoginDTO } from "../types/auth";
+// ✅ 1. IMPORTAR EL STORE DEL CARRITO DEL CLIENTE
+import { useCarritoClienteStore } from "./carritoClienteStore";
 
 interface AuthState {
   autenticado: boolean;
@@ -84,6 +86,8 @@ export const useAuthStore = create<AuthState>()((set) => ({
     localStorage.removeItem("usuarioNombre");
     localStorage.removeItem("usuarioRol");
     localStorage.removeItem("clienteId");
+
+    useCarritoClienteStore.getState().limpiarCarrito();
 
     set({
       autenticado: false,

@@ -9,6 +9,7 @@ import {
   MapPin,
   Plus,
   Loader2,
+  Trash2,
 } from "lucide-react";
 import { useCarritoClienteStore } from "../store/carritoClienteStore";
 import { useAuthStore } from "../store/authStore";
@@ -30,8 +31,13 @@ export default function CheckoutPage() {
 
   const clienteId = useAuthStore((state) => state.clienteId);
 
-  const { items, calcularSubtotal, limpiarCarrito, hayStockInsuficiente } =
-    useCarritoClienteStore();
+  const {
+    items,
+    calcularSubtotal,
+    limpiarCarrito,
+    hayStockInsuficiente,
+    eliminarProducto,
+  } = useCarritoClienteStore();
 
   const [procesando, setProcesando] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -206,17 +212,27 @@ export default function CheckoutPage() {
             {items.map((item) => (
               <div
                 key={item.productoId}
-                className="flex justify-between items-center py-3 border-b border-[#334155] last:border-0"
+                className="flex justify-between items-center py-3 border-b border-[#334155] last:border-0 group"
               >
-                <div>
+                <div className="flex-1">
                   <p className="font-medium text-[#F1F5F9]">{item.nombre}</p>
                   <p className="text-sm text-[#94A3B8]">
                     Cantidad: {item.cantidad}
                   </p>
                 </div>
-                <p className="font-mono font-semibold text-[#3B82F6]">
-                  S/ {(item.precioUnitario * item.cantidad).toFixed(2)}
-                </p>
+                <div className="flex items-center gap-4">
+                  <p className="font-mono font-semibold text-[#3B82F6]">
+                    S/ {(item.precioUnitario * item.cantidad).toFixed(2)}
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => eliminarProducto(item.productoId)}
+                    className="p-2 text-[#94A3B8] hover:text-[#EF4444] hover:bg-red-500/10 rounded-lg transition-colors opacity-0 group-hover:opacity-100"
+                    title="Eliminar producto"
+                  >
+                    <Trash2 size={16} />
+                  </button>
+                </div>
               </div>
             ))}
           </div>
@@ -232,7 +248,6 @@ export default function CheckoutPage() {
                   Dirección de Envío
                 </label>
 
-                {/* Botón para agregar nueva dirección (solo si ya tiene direcciones y no está editando) */}
                 {!mostrarFormDireccion && direcciones.length > 0 && (
                   <button
                     type="button"
@@ -244,7 +259,6 @@ export default function CheckoutPage() {
                 )}
               </div>
 
-              {/* CASO 1: Mostrar formulario inline para crear dirección */}
               {mostrarFormDireccion ? (
                 <div className="bg-[#0F172A] rounded-lg border border-[#334155] p-4 space-y-4 mt-2">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -340,7 +354,6 @@ export default function CheckoutPage() {
                   </div>
                 </div>
               ) : direcciones.length === 0 ? (
-                /* CASO 2: No hay direcciones y no está editando -> Mostrar mensaje y botón automático */
                 <div className="space-y-3">
                   <p className="text-sm text-[#EF4444]">
                     No tienes direcciones registradas. Agrégala para continuar.
@@ -355,7 +368,6 @@ export default function CheckoutPage() {
                   </Boton>
                 </div>
               ) : (
-                /* CASO 3: Ya tiene direcciones -> Mostrar selector */
                 <select
                   {...register("direccionId", { valueAsNumber: true })}
                   className="w-full px-3 py-2 rounded-lg border border-[#334155] bg-[#0F172A] text-[#F1F5F9] focus:border-[#3B82F6] outline-none transition-all"
