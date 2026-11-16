@@ -1,20 +1,16 @@
 import type { Categoria } from "./Categoria";
 export type EstadoProducto = "ACTIVO" | "INACTIVO";
 
-// ======================================================
-// ENTIDADES PRINCIPALES (Basadas en el schema de Prisma)
-// ======================================================
-
 export interface Producto {
   id: number;
   categoriaId: number;
   nombre: string;
   descripcion?: string | null;
   costoAdquisicion: number;
-  imagen?: string | null; // ✅ Campo de imagen que viene del backend
+  imagen?: string | null;
   precioVenta: number;
   activo: boolean;
-  imagenUrl?: string | null; // ✅ Único campo adicional para el frontend
+  imagenUrl?: string | null;
   creadoEn: string;
   actualizadoEn: string;
 }
@@ -27,19 +23,10 @@ export interface Inventario {
   actualizadoEn: string;
 }
 
-// ======================================================
-// TIPOS COMPUESTOS (Para respuestas del backend con include)
-// ======================================================
-
-// Cuando el backend hace: prisma.producto.findMany({ include: { categoria: true, inventario: true } })
 export interface ProductoConDetalles extends Producto {
   categoria: Categoria;
   inventario: Inventario | null;
 }
-
-// ======================================================
-// DTOs (Data Transfer Objects) para Formularios
-// ======================================================
 
 export interface ProductoCreacionDTO {
   categoriaId: number;
@@ -62,5 +49,5 @@ export interface ProductoActualizacionDTO {
 
 export interface ActualizarStockDTO {
   stock: number;
-  motivo?: string; // Ej: "Ajuste por inventario físico", "Merma"
+  motivo?: string;
 }

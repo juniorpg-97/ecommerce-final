@@ -69,7 +69,6 @@ export default function NuevoProductoPage() {
       className="max-w-3xl mx-auto space-y-6 min-h-screen p-6"
       style={{ backgroundColor: "#0F172A" }}
     >
-      {/* Encabezado */}
       <div className="flex items-center gap-4">
         <button
           onClick={() => navigate("/productos")}
@@ -89,10 +88,8 @@ export default function NuevoProductoPage() {
         </div>
       </div>
 
-      {/* Formulario */}
       <div className="bg-[#1E293B] rounded-lg border border-[#334155] shadow-lg p-6">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-          {/* Nombre */}
           <CampoTexto
             id="nombre"
             etiqueta="Nombre del Producto"
@@ -101,7 +98,6 @@ export default function NuevoProductoPage() {
             {...register("nombre")}
           />
 
-          {/* Descripción */}
           <div className="space-y-1">
             <label
               htmlFor="descripcion"
@@ -123,14 +119,13 @@ export default function NuevoProductoPage() {
             )}
           </div>
 
-          {/* Costo y Precio */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-1">
               <label
                 htmlFor="costoAdquisicion"
                 className="block text-sm font-medium text-[#F1F5F9]"
               >
-                Costo de Adquisición ($)
+                Costo de Adquisición (S/)
               </label>
               <input
                 id="costoAdquisicion"
@@ -157,7 +152,7 @@ export default function NuevoProductoPage() {
                 htmlFor="precioVenta"
                 className="block text-sm font-medium text-[#F1F5F9]"
               >
-                Precio de Venta ($)
+                Precio de Venta (S/)
               </label>
               <input
                 id="precioVenta"
@@ -178,7 +173,6 @@ export default function NuevoProductoPage() {
             </div>
           </div>
 
-          {/* Categoría */}
           <div className="space-y-1">
             <label
               htmlFor="categoriaId"
@@ -209,7 +203,6 @@ export default function NuevoProductoPage() {
             )}
           </div>
 
-          {/* Nota informativa */}
           <div className="flex items-start gap-2 p-3 rounded-lg bg-blue-500/10 border border-blue-500/30 text-blue-400 text-sm">
             <AlertCircle size={16} className="mt-0.5 flex-shrink-0" />
             <div>
@@ -221,7 +214,6 @@ export default function NuevoProductoPage() {
             </div>
           </div>
 
-          {/* Botones */}
           <div className="flex gap-3 pt-4 border-t border-[#334155]">
             <Boton
               type="submit"

@@ -3,7 +3,6 @@ import { Package, Clock, CheckCircle, Truck, XCircle } from "lucide-react";
 import { pedidoService } from "../services/pedidos";
 import type { Pedido } from "../types/Pedido";
 
-// ✅ COLORES ACTUALIZADOS PARA MODO OSCURO (Tarjetas)
 const ESTADOS_INFO: Record<
   string,
   { label: string; color: string; icono: any }

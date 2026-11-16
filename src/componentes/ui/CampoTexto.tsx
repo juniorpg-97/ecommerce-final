@@ -40,8 +40,8 @@ export function CampoTexto({
               : "border-[#303444] focus:border-[#4d8eff] focus:ring-[#4d8eff]/20"
           } ${className}`}
           style={{
-            backgroundColor: "#090e1c", // surfaceContainerLowest
-            color: "#dee2f6", // onSurface
+            backgroundColor: "#090e1c",
+            color: "#dee2f6",
           }}
           {...resto}
         />

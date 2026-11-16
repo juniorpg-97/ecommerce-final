@@ -1,7 +1,3 @@
-// ======================================================
-// ENTIDADES PRINCIPALES (Basadas en el schema de Prisma)
-// ======================================================
-
 export interface Cliente {
   id: number;
   usuarioId: number;
@@ -14,11 +10,6 @@ export interface Cliente {
   actualizadoEn: string;
 }
 
-// ======================================================
-// DTOs (Data Transfer Objects) para Formularios
-// ======================================================
-
-// Para cuando el admin edita los datos de un cliente
 export interface ClienteActualizacionDTO {
   nombre?: string;
   apellido?: string;

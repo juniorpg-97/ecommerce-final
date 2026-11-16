@@ -67,7 +67,6 @@ export default function POSPage() {
   const total = calcularTotal();
   const { cajaActiva, cargando: cargandoCaja, error: errorCaja } = useCaja();
 
-  // Buscar productos
   useEffect(() => {
     if (busqueda.length < 2) {
       setResultadosBusqueda([]);
@@ -154,7 +153,6 @@ export default function POSPage() {
     );
   }
 
-  // ✅ Pantalla de error si no hay caja abierta
   if (!cajaActiva && !cargandoCaja) {
     return (
       <div
@@ -182,7 +180,6 @@ export default function POSPage() {
     );
   }
 
-  // Si hay una venta exitosa, mostrar comprobante
   if (ventaExitosa) {
     return (
       <div
@@ -250,7 +247,6 @@ export default function POSPage() {
       className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-[calc(100vh-8rem)] p-6"
       style={{ backgroundColor: "#0F172A" }}
     >
-      {/* Columna Izquierda: Buscador y Resultados */}
       <div className="lg:col-span-2 bg-[#1E293B] rounded-lg border border-[#334155] shadow-lg p-4 flex flex-col">
         <h2 className="text-lg font-semibold text-[#F1F5F9] mb-4 flex items-center gap-2">
           <ShoppingCart className="text-[#3B82F6]" /> Buscar Productos
@@ -323,13 +319,11 @@ export default function POSPage() {
         </div>
       </div>
 
-      {/* Columna Derecha: Carrito y Pago */}
       <div className="bg-[#1E293B] rounded-lg border border-[#334155] shadow-lg p-4 flex flex-col">
         <h2 className="text-lg font-semibold text-[#F1F5F9] mb-4">
           Resumen de Venta
         </h2>
 
-        {/* Lista de ítems */}
         <div className="flex-1 overflow-y-auto space-y-3 mb-4 pr-2">
           {items.length === 0 ? (
             <p className="text-center text-[#94A3B8] py-8">
@@ -387,7 +381,6 @@ export default function POSPage() {
           )}
         </div>
 
-        {/* Total */}
         <div className="border-t border-[#334155] pt-4 mb-4">
           <div className="flex justify-between text-xl font-bold text-[#F1F5F9]">
             <span>Total:</span>
@@ -395,7 +388,6 @@ export default function POSPage() {
           </div>
         </div>
 
-        {/* Formulario de Pago */}
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-[#F1F5F9] mb-1">

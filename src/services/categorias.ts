@@ -8,7 +8,6 @@ export const categoriaService = {
     return respuesta.data;
   },
 
-  // ✅ AGREGA ESTE MÉTODO:
   getPublicas: async (): Promise<Categoria[]> => {
     const respuesta = await api.get<Categoria[]>("/categorias/publicas");
     return respuesta.data;

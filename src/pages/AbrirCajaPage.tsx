@@ -2,16 +2,10 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { DollarSign, AlertCircle } from "lucide-react";
 import { cajaService } from "../services/caja";
 import { Boton } from "../componentes/ui/Boton";
-
-const abrirCajaSchema = z.object({
-  montoInicial: z.number().min(0, "El monto inicial no puede ser negativo"),
-});
-
-type AbrirCajaFormData = z.infer<typeof abrirCajaSchema>;
+import { abrirCajaSchema, type AbrirCajaFormData } from "../schemas/caja";
 
 export default function AbrirCajaPage() {
   const navigate = useNavigate();
@@ -43,7 +37,6 @@ export default function AbrirCajaPage() {
   };
 
   return (
-    // 🔥 CAMBIO CLAVE: Usar h-screen en lugar de min-h-screen
     <div className="h-screen w-full" style={{ backgroundColor: "#0F172A" }}>
       <div className="max-w-2xl mx-auto py-8 px-4">
         <h1 className="text-2xl font-bold text-[#F1F5F9] mb-6 flex items-center gap-2">

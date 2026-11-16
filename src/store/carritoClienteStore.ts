@@ -97,7 +97,7 @@ export const useCarritoClienteStore = create<CarritoClienteState>()(
       },
     }),
     {
-      name: "carrito-cliente", // key en localStorage
+      name: "carrito-cliente",
     },
   ),
 );

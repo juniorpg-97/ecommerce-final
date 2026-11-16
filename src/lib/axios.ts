@@ -1,7 +1,6 @@
 import axios from "axios";
 
 export const api = axios.create({
-  // ✅ USA LA VARIABLE DE ENTORNO, con fallback a localhost para desarrollo
   baseURL: import.meta.env.VITE_API_URL || "http://localhost:3000",
   withCredentials: true,
 });

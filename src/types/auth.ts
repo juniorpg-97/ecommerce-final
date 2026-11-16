@@ -10,14 +10,13 @@ export interface RegistroDTO {
   password: string;
 }
 
-// ✅ ACTUALIZADO: Agregamos clienteId como opcional
 export interface UsuarioData {
   id: number;
   nombre: string;
   apellido: string;
   email: string;
   rol: string;
-  clienteId?: number | null; // <--- ESTA LÍNEA ES LA QUE FALTABA
+  clienteId?: number | null;
 }
 
 export interface LoginRespuesta {
